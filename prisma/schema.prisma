@@ -16,3 +16,22 @@ model Document {
   title     String
   embedding Unsupported("vector(768)")?
 }
+
+// Represent the user accessing the portfolio
+model Visitor {
+  id        String        @id @default(cuid())
+  name      String
+  company   String?
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+}
+
+// Stores the conversation history for the /system dashboard
+model ChatMessage {
+  id        String   @id @default(cuid())
+  role      String // 'user | 'assistant'
+  content   String   @db.Text
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}

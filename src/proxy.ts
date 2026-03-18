@@ -1,19 +1,10 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import createMiddleware from 'next-intl/middleware'
+import { routing } from './i18n/routing'
 
-// The proxy function replaces the legacy middleware and runs on Node.js
-export function proxy(request: NextRequest) {
-    const { pathname } = request.nextUrl
+// Replace our manual proxy logic with the robust next-intl routing engine
+export default createMiddleware(routing)
 
-    // Simple i18n routing: redirect root to Portuguese by default
-    // Early return parttern applied here
-    if (pathname === '/') {
-        return NextResponse.redirect(new URL('/pt-BR', request.url))
-    }
-
-}
-
-// Ensure the proxy doesn't intercept static files or API routes
 export const config = {
+    // Match all pathname except for API routes, static file and images
     matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 }

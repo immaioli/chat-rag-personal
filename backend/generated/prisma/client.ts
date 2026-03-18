@@ -46,3 +46,13 @@ export { Prisma }
  * 
  */
 export type Document = Prisma.DocumentModel
+/**
+ * Model Visitor
+ * 
+ */
+export type Visitor = Prisma.VisitorModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
