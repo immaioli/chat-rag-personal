@@ -1,6 +1,12 @@
 /* Imports the highly optimized Tailwind v4 engine */
 @import "tailwindcss";
 
+/* 
+  Enable manual dark mode toggling driven by a CSS selector
+  This allows next-themes to inject the.dark class on the <html> tag.
+*/
+@custom-variant dark (&:where(.dark,.dark *));
+
 /* Define custom design tokens and theme variables directly in CSS */
 @theme {
   --color-primary: #0070f3;
