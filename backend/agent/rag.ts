@@ -2,9 +2,7 @@ import { ToolLoopAgent, embed } from "ai"
 import { createGroq } from "@ai-sdk/groq"
 import { google } from "@ai-sdk/google"
 import { z } from 'zod'
-import { PrismaClient } from "@prisma/client/extension"
-
-const prisma = new PrismaClient()
+import { prisma } from '../db/prisma'
 
 // Initialize Groq provider for ultra-fast Llama3 inference
 const groq = createGroq({ apiKey: process.env.GROQ_API_KEY })
