@@ -68,17 +68,17 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                 {/* Header */}
                 <header className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-[#283039] bg-white/95 dark:bg-[#111418]/95 backdrop-blur-sm shrink-0 z-20 gap-4 transition-colors duration-300">
                     <div className="flex items-center gap-4 min-w-0 w-full">
-                        <div className="w-12 h-12 shrink-0 bg-white rounded-lg flex items-center justify-center border border-gray-200 dark:border-[#283039] p-0.5 transition-colors">
+                        <div className="w-20 h-20 shrink-0 bg-white rounded-lg flex items-center justify-center border border-gray-200 dark:border-[#283039] p-0.5 transition-colors">
                             <img src="/logoHeader.png" alt="Logo" className="w-full h-full object-contain" />
                         </div>
                         <div className="w-px h-10 bg-gray-200 dark:bg-[#283039] hidden sm:block shrink-0 transition-colors"></div>
                         <div className="flex items-center gap-3 min-w-0 flex-1">
-                            <div className="relative shrink-0 group cursor-pointer">
+                            <div className="relative shrink-0 group">
                                 <div
-                                    className="size-11 rounded-full bg-cover bg-center border-2 border-gray-200 dark:border-[#283039] group-hover:border-[#137fec] transition-colors"
+                                    className="size-20 rounded-full bg-cover bg-center border-2 border-gray-200 dark:border-[#137fec] transition-colors"
                                     style={{ backgroundImage: `url('${avatarUrl}')` }}
                                 ></div>
-                                <div className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-[#111418] rounded-full transition-colors" title="Online"></div>
+                                <div className="absolute bottom-0 right-1 size-5 bg-green-500 border-2 border-white dark:border-[#111418] rounded-full transition-colors" title="Online"></div>
                             </div>
 
                             <div className="flex flex-col min-w-0 flex-1">
