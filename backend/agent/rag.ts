@@ -21,7 +21,7 @@ export const personalChatbotAgent = new ToolLoopAgent({
     prepareCall: async ({ options, ...settings }) => {
         // Generate mathematical embedding using Google AI Studio
         const { embedding } = await embed({
-            model: google.embeddingModel('gemini-embedding-001'),
+            model: google.embeddingModel(`${process.env.GOOGLE_EMBEDDING_MODEL}`),
             value: options.query,
         })
 
