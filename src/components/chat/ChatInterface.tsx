@@ -7,6 +7,7 @@ import { MessageBubble } from '@/components/chat/MessageBubble';
 import { TypingIndicator } from '@/components/chat/TypingIndicator';
 import { QuickActionsMenu } from '@/components/chat/QuickActionsMenu';
 import { ChatInputForm } from '@/components/chat/ChatInputForm';
+import { TrainingDisclaimer } from './TrainingDisclaimer';
 
 const avatar = '/avatar.jpg'
 const avatarAI = '/avatar_mAIo.png'
@@ -91,9 +92,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                         onSubmit={onSubmit}
                         disabled={status !== 'ready'}
                     />
-                    <p className="text-center text-gray-500 dark:text-[#4f5b69] text-[10px] mt-1 transition-colors">
-                        Selecione um tópico ou digite sua pergunta para continuar a conversa.
-                    </p>
+                    <TrainingDisclaimer />
                 </div>
             </div>
         </div>
