@@ -2,11 +2,12 @@
 
 import { useChat } from '@ai-sdk/react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
     FileText, Briefcase, GraduationCap, Code2, LayoutGrid, Mail,
     ChevronDown, Menu, Atom, Server, Smartphone, Brain, Mic, Braces
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 export function ChatInterface({ visitorId }: { visitorId: string }) {
     const { theme, setTheme } = useTheme();
@@ -14,11 +15,20 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     const [inputValue, setInputValue] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState('');
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const { messages, sendMessage, status } = useChat({
         api: '/api/chat',
         body: { visitorId }
     } as any);
+
+    const scrollBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollBottom();
+    }, [messages]);
 
     const quickActions = [
         { id: 'resumo', label: 'Resumo', icon: FileText },
@@ -60,6 +70,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     if (!mounted) return null;
 
     const avatarUrl = 'https://media.licdn.com/dms/image/v2/D4D03AQGLerRFEXKPPA/profile-displayphoto-scale_400_400/B4DZpaZM19GQAk-/0/1762453152007?e=1775692800&v=beta&t=TfnUCba3xfXywcttn-tbRGRbNnlrSxzQumb4UVWoeFg';
+    const avatarAI = '/avatar_mAIo.png'
 
     return (
         <div className="bg-gray-100 dark:bg-[#101922] font-sans text-gray-900 dark:text-white overflow-hidden h-screen w-full flex justify-center transition-colors duration-300">
@@ -105,11 +116,9 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                                         <span className="flex items-center gap-1"><Mic size={12} className="text-red-500 dark:text-red-400" /> Voice Assistants</span>
                                         <span className="text-gray-300 dark:text-[#3d4650]">|</span>
 
-                                        {/* Ícone de Plus (+) com Tooltip Customizado */}
                                         <div className="relative group flex items-center cursor-help">
                                             <span className="flex items-center gap-1 material-symbols-outlined text-yellow-500 text-[16px] transition-transform duration-300 group-hover:rotate-90">add</span>
 
-                                            {/* Tooltip */}
                                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 flex flex-col items-center">
                                                 <span className="bg-gray-800 dark:bg-[#283039] text-white text-[10px] px-2.5 py-1 rounded-md shadow-lg whitespace-nowrap border border-gray-700 dark:border-[#3d4650]">
                                                     Estou em constante aprendizado de outras stacks
@@ -152,43 +161,72 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                     </div>
 
                     {/* Hardcoded Initial Welcome Message */}
-                    {/* Alterado para items-center para centralizar avatar */}
                     <div className="flex items-center gap-3 group">
-                        <div className="size-10 shrink-0 rounded-full bg-cover bg-center border border-gray-200 dark:border-transparent" style={{ backgroundImage: `url('${avatarUrl}')` }}></div>
+                        <div
+                            className="size-20 rounded-full bg-cover bg-center border-2 border-gray-200 dark:border-[#137fec] transition-colors"
+                            style={{ backgroundImage: `url('${avatarAI}')` }}>
+                        </div>
                         <div className="flex flex-col gap-1 items-start max-w-[80%]">
-                            <span className="text-gray-500 dark:text-[#9dabb9] text-xs ml-1 transition-colors">Irineu Marcelo Maioli • {currentDate}</span>
+                            <span className="text-gray-500 dark:text-[#9dabb9] text-xs ml-1 transition-colors">mAIo • {currentDate}</span>
                             <div className="p-4 rounded-2xl rounded-bl-none bg-white dark:bg-[#283039] text-gray-800 dark:text-white text-[15px] leading-relaxed shadow-sm border border-gray-100 dark:border-transparent transition-colors">
-                                Olá! Bem-vindo ao meu portfólio. Sou um assistente virtual com Inteligência Artificial treinado para responder a questões sobre a trajetória profissional, competências e projetos do Irineu. Sinta-se à vontade para selecionar um tópico rápido abaixo ou escrever livremente a sua pergunta!
+                                Olá e bem-vindo! Eu sou o mAIo, a Inteligência Artificial do portfólio do Irineu. Fui treinado para lhe contar tudo sobre a trajetória profissional dele, os seus projetos de destaque e as suas principais habilidades técnicas. Sinta-se à vontade para escolher um dos tópicos rápidos abaixo ou digitar a sua pergunta!
                             </div>
                         </div>
                     </div>
 
                     {/* Dynamic Messages Loop */}
                     {messages.map((m) => m.role === 'user' ? (
-                        // Alterado para items-center para centralizar avatar
                         <div key={m.id} className="flex items-center gap-3 justify-end group">
                             <div className="flex flex-col gap-1 items-end max-w-[80%]">
-                                {/* Adicionado a currentDate para o Visitante */}
                                 <span className="text-gray-500 dark:text-[#9dabb9] text-xs mr-1 transition-colors">Visitante • {currentDate}</span>
                                 <div className="px-4 py-3 rounded-2xl rounded-br-none bg-[#137fec] text-white text-[15px] font-medium shadow-md shadow-[#137fec]/20">
-                                    {m.parts?.map((part: any, index: number) => part.type === 'text' ? <span key={index}>{part.text}</span> : null)}
-                                    {!m.parts && <span>{m.parts as any}</span>}
+                                    {m.parts?.map((part: any, index: number) => part.type === 'text'
+                                        ? <span key={index}>{part.text}</span>
+                                        : null)}
+                                    {!m.parts && <span>{m as any}.content</span>}
                                 </div>
                             </div>
-                            <div className="size-10 shrink-0 rounded-full bg-gray-200 dark:bg-[#283039] flex items-center justify-center transition-colors">
+                            <div className="size-20 shrink-0 rounded-full bg-gray-200 dark:bg-[#283039] flex items-center justify-center transition-colors">
                                 <span className="material-symbols-outlined text-gray-500 dark:text-[#9dabb9]">account_circle</span>
                             </div>
                         </div>
                     ) : (
-                        // Alterado para items-center para centralizar avatar
                         <div key={m.id} className="flex items-center gap-3 group">
-                            <div className="size-10 shrink-0 rounded-full bg-cover bg-center border border-gray-200 dark:border-transparent" style={{ backgroundImage: `url('${avatarUrl}')` }}></div>
+                            <div
+                                className="size-20 rounded-full bg-cover bg-center border-2 border-gray-200 dark:border-[#137fec] transition-colors"
+                                style={{ backgroundImage: `url('${avatarAI}')` }}>
+                            </div>
                             <div className="flex flex-col gap-1 items-start max-w-[85%] sm:max-w-[70%]">
-                                {/* Adicionado a currentDate nas respostas dinâmicas também */}
-                                <span className="text-gray-500 dark:text-[#9dabb9] text-xs ml-1 transition-colors">Irineu Marcelo Maioli • {currentDate}</span>
+                                <span className="text-gray-500 dark:text-[#9dabb9] text-xs ml-1 transition-colors">mAIo • {currentDate}</span>
                                 <div className="p-5 rounded-2xl rounded-bl-none bg-white dark:bg-[#283039] text-gray-800 dark:text-white text-[15px] shadow-sm border border-gray-100 dark:border-transparent w-full transition-colors">
-                                    {m.parts?.map((part: any, index: number) => part.type === 'text' ? <div key={index} className="whitespace-pre-wrap">{part.text}</div> : null)}
-                                    {!m.parts && <div className="whitespace-pre-wrap">{m.parts as any}</div>}
+                                    {m.parts?.map((part: any, index: number) => part.type === 'text' ? (
+                                        <div key={index} className="flex flex-col space-y-2">
+                                            <ReactMarkdown
+                                                components={{
+                                                    a: ({ node, ...props }) => <a {...props} className="text-blue-500 hover:text-blue-400 underline" target="_blank" rel="noopener noreferrer" />,
+                                                    p: ({ node, ...props }) => <p {...props} className="m-0 leading-relaxed" />,
+                                                    ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-5 m-0 space-y-0" />,
+                                                    li: ({ node, ...props }) => <li {...props} className="m-0" />
+                                                }}
+                                            >
+                                                {part.text}
+                                            </ReactMarkdown>
+                                        </div>
+                                    ) : null)}
+                                    {!m.parts &&
+                                        <div className="flex flex-col space-y-2">
+                                            <ReactMarkdown
+                                                components={{
+                                                    a: ({ node, ...props }) => <a {...props} className="text-blue-500 hover:text-blue-400 underline" target="_blank" rel="noopener noreferrer" />,
+                                                    p: ({ node, ...props }) => <p {...props} className="m-0 leading-relaxed" />,
+                                                    ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-5 m-0 space-y-0" />,
+                                                    li: ({ node, ...props }) => <li {...props} className="m-0" />
+                                                }}
+                                            >
+                                                {(m as any).content}
+                                            </ReactMarkdown>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -196,9 +234,11 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
                     {/* Loading/Typing Indicator */}
                     {(status === 'submitted' || status === 'streaming') && messages[messages.length - 1]?.role === 'user' && (
-                        // Alterado para items-center para centralizar avatar
                         <div className="flex items-center gap-3 opacity-50 mt-2">
-                            <div className="size-8 shrink-0 rounded-full bg-cover bg-center border border-gray-200 dark:border-transparent" style={{ backgroundImage: `url('${avatarUrl}')` }}></div>
+                            <div
+                                className="size-20 rounded-full bg-cover bg-center border-2 border-gray-200 dark:border-[#137fec] transition-colors"
+                                style={{ backgroundImage: `url('${avatarAI}')` }}>
+                            </div>
                             <div className="bg-white dark:bg-[#283039] border border-gray-100 dark:border-transparent rounded-2xl rounded-bl-none px-4 py-3 flex gap-1 transition-colors">
                                 <div className="size-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce"></div>
                                 <div className="size-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -206,12 +246,13 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                             </div>
                         </div>
                     )}
+                    <div ref={messagesEndRef} className="h-px w-full" />
                 </div>
 
                 {/* Footer / Input Area */}
                 <div className="flex flex-col gap-3 p-4 bg-white dark:bg-[#111418] border-t border-gray-200 dark:border-[#283039] shrink-0 z-20 transition-colors duration-300">
 
-                    {/* Dropdown de Quick Actions */}
+                    {/* Quick Actions dropdown */}
                     <div className="relative w-full max-w-full">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -225,7 +266,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                             <ChevronDown size={18} className={`text-gray-500 dark:text-[#9dabb9] transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
 
-                        {/* Menu Dropdown */}
+                        {/* Dropdown Menu */}
                         {isDropdownOpen && (
                             <div className="absolute bottom-[calc(100%+8px)] left-0 w-full bg-white dark:bg-[#283039] border border-gray-200 dark:border-[#3d4650] rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2 transition-colors">
                                 <div className="grid grid-cols-2 gap-px bg-gray-100 dark:bg-[#3d4650]">
@@ -248,7 +289,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                         )}
                     </div>
 
-                    {/* Formulário de Input */}
+                    {/* Input form */}
                     <form onSubmit={onSubmit} className="flex gap-3 items-center max-w-full">
                         <div className="flex-1 bg-gray-100 dark:bg-[#283039] rounded-xl flex items-center px-4 h-12 border border-transparent focus-within:border-[#137fec] focus-within:bg-white dark:focus-within:bg-[#283039] transition-colors shadow-sm">
                             <input
@@ -272,6 +313,6 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
