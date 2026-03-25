@@ -5,7 +5,7 @@ CREATE EXTENSION IF NOT EXISTS "vector";
 CREATE TABLE "Document" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
-    "embedding" vector(768),
+    "embedding" vector,
 
     CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
 );

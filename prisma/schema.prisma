@@ -1,8 +1,6 @@
 generator client {
-  provider = "prisma-client"
-
-  output = "../backend/generated/prisma"
-
+  provider        = "prisma-client-js"
+  output          = "../backend/generated/prisma"
   previewFeatures = ["postgresqlExtensions"]
 }
 
@@ -12,9 +10,9 @@ datasource db {
 }
 
 model Document {
-  id        Int                         @id @default(autoincrement())
+  id        Int                    @id @default(autoincrement())
   title     String
-  embedding Unsupported("vector(768)")?
+  embedding Unsupported("vector")?
 }
 
 // Represent the user accessing the portfolio
@@ -34,4 +32,11 @@ model ChatMessage {
   visitorId String
   visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+model Knowledge {
+  id        String                 @id @default(cuid())
+  content   String                 @db.Text
+  vector    Unsupported("vector")?
+  createdAt DateTime               @default(now())
 }

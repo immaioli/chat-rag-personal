@@ -22,7 +22,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.5.0",
   "engineVersion": "280c870be64f457428992c43c1f6d557fab6e29e",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n\n  output = \"../backend/generated/prisma\"\n\n  previewFeatures = [\"postgresqlExtensions\"]\n}\n\ndatasource db {\n  provider   = \"postgresql\"\n  extensions = [vector]\n}\n\nmodel Document {\n  id        Int                         @id @default(autoincrement())\n  title     String\n  embedding Unsupported(\"vector(768)\")?\n}\n\n// Represent the user accessing the portfolio\nmodel Visitor {\n  id        String        @id @default(cuid())\n  name      String\n  company   String?\n  messages  ChatMessage[]\n  createdAt DateTime      @default(now())\n}\n\n// Stores the conversation history for the /system dashboard\nmodel ChatMessage {\n  id        String   @id @default(cuid())\n  role      String // 'user | 'assistant'\n  content   String   @db.Text\n  visitorId String\n  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n\n  output = \"../backend/generated/prisma\"\n\n  previewFeatures = [\"postgresqlExtensions\"]\n}\n\ndatasource db {\n  provider   = \"postgresql\"\n  extensions = [vector]\n}\n\nmodel Document {\n  id        Int                         @id @default(autoincrement())\n  title     String\n  embedding Unsupported(\"vector\")?\n}\n\n// Represent the user accessing the portfolio\nmodel Visitor {\n  id        String        @id @default(cuid())\n  name      String\n  company   String?\n  messages  ChatMessage[]\n  createdAt DateTime      @default(now())\n}\n\n// Stores the conversation history for the /system dashboard\nmodel ChatMessage {\n  id        String   @id @default(cuid())\n  role      String // 'user | 'assistant'\n  content   String   @db.Text\n  visitorId String\n  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)\n  createdAt DateTime @default(now())\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -63,28 +63,28 @@ export type LogOptions<ClientOptions extends Prisma.PrismaClientOptions> =
   'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never
 
 export interface PrismaClientConstructor {
-    /**
-   * ## Prisma Client
-   * 
-   * Type-safe database client for TypeScript
-   * @example
-   * ```
-   * const prisma = new PrismaClient({
-   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
-   * })
-   * // Fetch zero or more Documents
-   * const documents = await prisma.document.findMany()
-   * ```
-   * 
-   * Read more in our [docs](https://pris.ly/d/client).
-   */
+  /**
+ * ## Prisma Client
+ * 
+ * Type-safe database client for TypeScript
+ * @example
+ * ```
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
+ * // Fetch zero or more Documents
+ * const documents = await prisma.document.findMany()
+ * ```
+ * 
+ * Read more in our [docs](https://pris.ly/d/client).
+ */
 
   new <
     Options extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
     LogOpts extends LogOptions<Options> = LogOptions<Options>,
     OmitOpts extends Prisma.PrismaClientOptions['omit'] = Options extends { omit: infer U } ? U : Prisma.PrismaClientOptions['omit'],
     ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs
-  >(options: Prisma.Subset<Options, Prisma.PrismaClientOptions> ): PrismaClient<LogOpts, OmitOpts, ExtArgs>
+  >(options: Prisma.Subset<Options, Prisma.PrismaClientOptions>): PrismaClient<LogOpts, OmitOpts, ExtArgs>
 }
 
 /**
@@ -122,15 +122,15 @@ export interface PrismaClient<
    */
   $disconnect(): runtime.Types.Utils.JsPromise<void>;
 
-/**
-   * Executes a prepared raw query and returns the number of affected rows.
-   * @example
-   * ```
-   * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
-   * ```
-   *
-   * Read more in our [docs](https://pris.ly/d/raw-queries).
-   */
+  /**
+     * Executes a prepared raw query and returns the number of affected rows.
+     * @example
+     * ```
+     * const result = await prisma.$executeRaw`UPDATE User SET cool = ${true} WHERE email = ${'user@email.com'};`
+     * ```
+     *
+     * Read more in our [docs](https://pris.ly/d/raw-queries).
+     */
   $executeRaw<T = unknown>(query: TemplateStringsArray | Prisma.Sql, ...values: any[]): Prisma.PrismaPromise<number>;
 
   /**
@@ -190,14 +190,14 @@ export interface PrismaClient<
     extArgs: ExtArgs
   }>>
 
-      /**
-   * `prisma.document`: Exposes CRUD operations for the **Document** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Documents
-    * const documents = await prisma.document.findMany()
-    * ```
-    */
+  /**
+* `prisma.document`: Exposes CRUD operations for the **Document** model.
+* Example usage:
+* ```ts
+* // Fetch zero or more Documents
+* const documents = await prisma.document.findMany()
+* ```
+*/
   get document(): Prisma.DocumentDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
