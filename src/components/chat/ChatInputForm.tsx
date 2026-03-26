@@ -1,3 +1,5 @@
+import { Send } from "lucide-react";
+
 interface ChatInputFormProps {
     inputValue: string;
     setInputValue: (val: string) => void;
@@ -23,7 +25,7 @@ export function ChatInputForm({ inputValue, setInputValue, onSubmit, disabled }:
                 disabled={disabled || !inputValue.trim()}
                 className="bg-[#137fec] text-white p-3 rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-[#137fec]/20 disabled:opacity-50"
             >
-                <span className="material-symbols-outlined">send</span>
+                <Send size={20} />
             </button>
         </form>
     );

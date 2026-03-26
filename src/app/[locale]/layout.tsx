@@ -1,24 +1,33 @@
-import { ThemeProvider } from "@/components/ThemeProvider"
-import '../../globals.css';
-import { ReactNode } from "react";
+import '@/globals.css';
+import { ReactNode } from 'react';
+import { ThemeProvider } from '@/components/ThemeProvider'; // Ajuste o caminho se necessário
 
+// METADATA: SEO and browser tab configuration
+export const metadata = {
+    title: 'maioli.dev | mAIo Assistant Chat',
+    description: 'AI Portfolio and RAG Knowledge Base',
+};
 
-// Root layout requires suppressHudrationWaring when using next-themes
-export default function LocaleLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Safely import Material Symbols to prevent rendering icons as plain text */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="bg-gray-500 dark:bg-[#0f172a] transition-colors duration-300">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  )
+// ROOT LAYOUT: Mandatory in Next.js App Router to define HTML structure
+export default function RootLayout({
+    children,
+    params: { locale }
+}: {
+    children: ReactNode;
+    params: { locale: string };
+}) {
+    return (
+        // WARNING: suppressHydrationWarning is strictly required when using next-themes
+        <html lang={locale} suppressHydrationWarning>
+            <body className="antialiased text-gray-900 dark:text-gray-100 bg-white dark:bg-[#111418] transition-colors">
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="dark"
+                    enableSystem={false}
+                >
+                    {children}
+                </ThemeProvider>
+            </body>
+        </html>
+    );
 }

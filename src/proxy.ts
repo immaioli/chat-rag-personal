@@ -1,27 +1,31 @@
 import createIntlMiddleware from 'next-intl/middleware'
 import { routing } from './i18n/routing'
 import { auth } from './auth'
+import { NextResponse } from 'next/server'
 
-// 1. Initialize the next-intl routing engine
 const intlProxy = createIntlMiddleware(routing)
 
-// 2. Wrap the main proxy export with the Auth.js middleware
-export default auth((req) => {
-    const isSystemRoute = req.nextUrl.pathname.includes('/system')
-    const isLoggedIn = !!req.auth
+export const proxy = auth((req) => {
+    const pathname = req.nextUrl.pathname;
+    const isLoggedIn = !!req.auth;
 
-    // Early return: Protects the /system route and redirects to the default login page if not authenticated
-    if (isSystemRoute && !isLoggedIn) {
-        return Response.redirect(new URL('api/auth/signin', req.nextUrl))
+    // TELEMETRY: Logs proxy decisions to the terminal
+    console.log(`[Proxy Edge] Route: ${pathname} | Logged in: ${isLoggedIn}`);
+
+    // RULE 1: Protect the system route
+    if (pathname.includes('/system') && !isLoggedIn) {
+        return NextResponse.redirect(new URL('/pt-BR/login', req.nextUrl));
     }
-    // 3. If the security check passed (or it is not a protected route), forward to next-intl for locale routing
-    return intlProxy(req)
-})
 
+    // RULE 2: Prevent logged-in users from seeing the login page
+    if (pathname.includes('/login') && isLoggedIn) {
+        return NextResponse.redirect(new URL('/pt-BR/system', req.nextUrl));
+    }
+
+    // RULE 3: Forward to next-intl for locale routing
+    return intlProxy(req);
+});
 
 export const config = {
-    // Match all pathname except for API routes, static file and images
-    matcher: [
-        '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'
-    ]
+    matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)']
 }

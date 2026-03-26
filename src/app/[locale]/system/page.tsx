@@ -1,4 +1,4 @@
-import { prisma } from "../../../backend/db/prisma"
+import { prisma } from "../../../../backend/db/prisma"
 
 // Server Component acting as an internal Admin Dashboard
 export default async function SystemDashboard() {
