@@ -1,0 +1,30 @@
+{
+    "WelcomeModal": {
+        "title": "Welcome",
+        "description": "Please, choose your language and identify yourself.",
+        "langLabel": "Language",
+        "name_ph": "Your Name (Required)",
+        "company_ph": "Company (Optional)",
+        "disclaimer": "By entering, you agree that messages sent on this platform will be stored exclusively for the purpose of auditing, analyzing, and continuously improving this Artificial Intelligence model.",
+        "button_load": "Starting Brain...",
+        "button_default": "Enter Chat"
+    },
+    "ChatInterface": {
+        "today": "Today",
+        "welcomeMessage": "Hello, **{name}**! I'm mAIo, Irineu's portfolio AI. I'm here to share everything about his professional journey, key projects, and main technical skills. Feel free to pick a quick topic below or type your question!",
+        "inputPlaceholder": "Or type your message here...",
+        "disclaimer": "mAIo is an AI in continuous evolution and may make mistakes."
+    },
+    "QuickActions": {
+        "title": "Select a quick topic",
+        "summary": "Summary",
+        "experience": "Experience",
+        "education": "Education",
+        "skills": "Skills",
+        "portfolio": "Portfolio",
+        "contact": "Contact"
+    },
+    "TechStack": {
+        "tooltip": "I am constantly learning new stacks"
+    }
+}

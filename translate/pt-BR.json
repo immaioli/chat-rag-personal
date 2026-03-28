@@ -1,0 +1,30 @@
+{
+    "WelcomeModal": {
+        "title": "Bem-vindo(a)",
+        "description": "Por favor, escolha o seu idioma e identifique-se.",
+        "langLabel": "Idioma",
+        "name_ph": "Seu Nome (Obrigatório)",
+        "company_ph": "Empresa (Opcional)",
+        "disclaimer": "Ao entrar, você concorda que as mensagens enviadas nesta plataforma serão armazenadas exclusivamente para fins de auditoria, análise e aprimoramento contínuo deste modelo de Inteligência Artificial.",
+        "button_load": "Iniciando Cérebro...",
+        "button_default": "Entrar na Conversa"
+    },
+    "ChatInterface": {
+        "today": "Hoje",
+        "welcomeMessage": "Olá, **{name}**! Eu sou o mAIo, a Inteligência Artificial do portfólio do Irineu. Fui treinado para lhe contar tudo sobre a trajetória profissional dele, os seus projetos de destaque e as suas principais habilidades técnicas. Sinta-se à vontade para escolher um dos tópicos rápidos abaixo ou digitar a sua pergunta!",
+        "inputPlaceholder": "Ou digite sua mensagem aqui...",
+        "disclaimer": "O mAIo é uma IA em contínua evolução e pode cometer equívocos."
+    },
+    "QuickActions": {
+        "title": "Selecione um tópico rápido",
+        "summary": "Resumo",
+        "experience": "Experiência",
+        "education": "Graduação",
+        "skills": "Habilidades",
+        "portfolio": "Portfólio",
+        "contact": "Contato"
+    },
+    "TechStack": {
+        "tooltip": "Estou em constante aprendizado de outras stacks"
+    }
+}
