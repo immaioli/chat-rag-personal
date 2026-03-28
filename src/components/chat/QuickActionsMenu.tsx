@@ -2,21 +2,31 @@ import { useState } from 'react';
 import { FileText, Briefcase, GraduationCap, Code2, LayoutGrid, Mail } from 'lucide-react';
 import { QuickActionButton } from './QuickActionButton';
 import { QuickActionsToggle } from './QuickActionsToggle';
+// IMPORT: next-intl hook for translations
+import { useTranslations } from 'next-intl';
 
-const quickActions = [
-    { id: 'resumo', label: 'Resumo', icon: FileText },
-    { id: 'experiencia', label: 'Experiência', icon: Briefcase },
-    { id: 'graduacao', label: 'Graduação', icon: GraduationCap },
-    { id: 'habilidades', label: 'Habilidades', icon: Code2 },
-    { id: 'portfolio', label: 'Portfólio', icon: LayoutGrid },
-    { id: 'contato', label: 'Contato', icon: Mail }
+// CONFIGURATION: Array of quick actions using translation keys instead of hardcoded labels.
+// The 'id' property strictly matches the keys defined in your JSON translation files.
+const quickActionsConfig = [
+    { id: 'summary', icon: FileText },
+    { id: 'experience', icon: Briefcase },
+    { id: 'education', icon: GraduationCap },
+    { id: 'skills', icon: Code2 },
+    { id: 'portfolio', icon: LayoutGrid },
+    { id: 'contact', icon: Mail }
 ];
 
 export function QuickActionsMenu({ onAction }: { onAction: (action: string) => void }) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleSelect = (label: string) => {
-        onAction(label);
+    // HOOK: Load translations targeting the QuickActions namespace
+    // Clean Code: Using a descriptive variable name
+    const quickActionsTranslations = useTranslations('QuickActions');
+
+    const handleSelect = (translatedLabel: string) => {
+        // ACTION: Sends the localized text to the chat input, 
+        // allowing the AI to naturally reply in the user's chosen language.
+        onAction(translatedLabel);
         setIsOpen(false);
     };
 
@@ -27,17 +37,19 @@ export function QuickActionsMenu({ onAction }: { onAction: (action: string) => v
                 onClick={() => setIsOpen(!isOpen)}
             />
             {isOpen && (
-                <div className="absolute bottom-[calc(100%+8px)] left-0 w-full bg-white dark:bg-[#283039] border border-gray-200 dark:border-[#3d4650] rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2 transition-colors">
-                    <div className="grid grid-cols-2 gap-px bg-gray-100 dark:bg-[#3d4650]">
-                        {quickActions.map((action) => (
-                            <QuickActionButton
-                                key={action.id}
-                                label={action.label}
-                                Icon={action.icon}
-                                onClick={() => handleSelect(action.label)}
-                            />
-                        ))}
-
+                <div className="absolute bottom-[calc(100%+8px)] left-0 w-full bg-white dark:bg-custom_surface border border-gray-200 dark:border-custom_border rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2 transition-colors">
+                    <div className="grid grid-cols-2 gap-px bg-gray-100 dark:bg-custom_border">
+                        {quickActionsConfig.map((action) => {
+                            const localizedLabel = quickActionsTranslations(action.id as any);
+                            return (
+                                <QuickActionButton
+                                    key={action.id}
+                                    label={localizedLabel}
+                                    Icon={action.icon}
+                                    onClick={() => handleSelect(localizedLabel)}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
             )}
