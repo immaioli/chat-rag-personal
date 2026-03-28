@@ -1,15 +1,18 @@
 interface MessageInfoProps {
     isUser: boolean;
     currentDate: string;
+    nameUser?: string;
 }
 
-export function MessageInfo({ isUser, currentDate }: MessageInfoProps) {
-    const senderName = isUser ? 'Visitante' : 'mAIo';
-    const marginClass = isUser ? 'mr-1' : 'ml-1';
-
+export function MessageInfo({ isUser, currentDate, nameUser }: MessageInfoProps) {
     return (
-        <span className={`text-gray-500 dark:text-[#9dabb9] text-xs transition-colors ${marginClass}`}>
-            {senderName} • {currentDate}
-        </span>
+        <div className="flex items-center gap-2 mb-1">
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                {isUser ? nameUser : 'mAIo'}
+            </span>
+            <span className="text-xs text-gray-500 dark:text-custom_text-muted">
+                {currentDate}
+            </span>
+        </div>
     );
 }
