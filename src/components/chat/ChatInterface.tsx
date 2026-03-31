@@ -18,6 +18,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     const [inputValue, setInputValue] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const chatTranslations = useTranslations('ChatInterface');
+    const [activeVisitorId, setActiveVisitorId] = useState(visitorId || '')
 
     // STATE: Holds the welcome message. Defaults to generic text for server-side rendering.
     const [visitorFirstName, setVisitorFirstName] = useState('Visitante');
@@ -26,7 +27,6 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     const { messages, setMessages, sendMessage, status } = useChat({
         api: '/api/chat',
-        body: { visitorId }
     } as any);
 
     // EFFECT (BACKUP): Save chat history to Session Storage whenever it changes
@@ -59,10 +59,14 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     useEffect(() => {
         // HYDRATION: Read visitor name from local storage and update the welcome message
-        const storedName = localStorage.getItem('mAIo_visitorName');
+        const storedName = localStorage.getItem('mAIo_visitorName')
+        const storedId = localStorage.getItem('mAIo_visitorId')
         if (storedName) {
-            const firstName = storedName.split(' ')[0].toUpperCase();
+            const firstName = storedName.split(' ')[0].toUpperCase()
             setVisitorFirstName(firstName);
+        }
+        if (storedId) {
+            setActiveVisitorId(storedId)
         }
 
         const now = new Date();
@@ -76,13 +80,18 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     }, []);
 
     const handleQuickAction = (action: string) => {
-        if (action) sendMessage({ text: action });
+        if (action) {
+            sendMessage(
+                { text: action },
+                { body: { visitorId: activeVisitorId } }
+            )
+        }
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (inputValue.trim()) {
-            sendMessage({ text: inputValue });
+            sendMessage({ text: inputValue }, { body: { visitorId: activeVisitorId } })
             setInputValue('');
         }
     };
