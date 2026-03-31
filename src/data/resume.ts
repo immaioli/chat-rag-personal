@@ -9,7 +9,7 @@ export const resumeChunks = [
     "Irineu's core technical skills are rooted in JavaScript and TypeScript, building robust Full Stack architectures and mission-critical systems. His GitHub serves as a laboratory for technical evolution, where he masters cutting-edge tools like Next.js 16, React 19, LangChain.js, Redis, BullMQ, Prisma, and Vector Databases like Pinecone.",
 
     // 4. Current Focus & Flagship Project (Present)
-    "Currently, as a Freelance Software Engineer, he focuses on innovative AI solutions. His most relevant project is the 'Chat RAG Personal', an advanced system using Next.js 16, React 19, LangChain.js, Redis, BullMQ, and Prisma. It demonstrates his expertise in RAG (Retrieval-Augmented Generation) architecture and multi-model routing between Google Gemini and Groq.",
+    "Currently, as a Freelance Software Engineer, he focuses on innovative AI solutions. His most relevant project is the 'Chat RAG Personal', an advanced system using Next.js 16, React 19, Redis, and Prisma. It demonstrates his expertise in RAG (Retrieval-Augmented Generation) architecture and multi-model routing between Google Gemini and Groq.",
 
     // 5. Experience: SiDi (May 2022 - August 2025)
     "From May 2022 to August 2025, Irineu was a Senior Software Engineer at SiDi. He played a key role in the global scaling of the Samsung Bixby Voice Assistant. His work involved JavaScript backend optimization for voice commands, LLM orchestration, and improving NLP models accuracy for pt-BR and es-LA markets.",
