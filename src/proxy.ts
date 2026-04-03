@@ -9,20 +9,25 @@ export const proxy = auth((req) => {
     const pathname = req.nextUrl.pathname;
     const isLoggedIn = !!req.auth;
 
-    // TELEMETRY: Logs proxy decisions to the terminal
     console.log(`[Proxy Edge] Route: ${pathname} | Logged in: ${isLoggedIn}`);
 
-    // RULE 1: Protect the system route
-    if (pathname.includes('/system') && !isLoggedIn) {
-        return NextResponse.redirect(new URL('/pt-BR/login', req.nextUrl));
+    // RULE 1: PROTECT THE ADMIN DASHBOARD
+    if (pathname === '/system' && !isLoggedIn) {
+        return NextResponse.redirect(new URL('/system/login', req.nextUrl));
     }
 
-    // RULE 2: Prevent logged-in users from seeing the login page
-    if (pathname.includes('/login') && isLoggedIn) {
-        return NextResponse.redirect(new URL('/pt-BR/system', req.nextUrl));
+    // RULE 2: PREVENT LOGGED-IN ADMINS FROM SEEING THE LOGIN PAGE
+    if (pathname === '/system/login' && isLoggedIn) {
+        return NextResponse.redirect(new URL('/system', req.nextUrl));
     }
 
-    // RULE 3: Forward to next-intl for locale routing
+    // RULE 3: BYPASS i18n FOR ALL ADMIN ROUTES
+    // Ensures Next.js doesn't try to translate /system or /system/login
+    if (pathname.startsWith('/system')) {
+        return NextResponse.next();
+    }
+
+    // RULE 4: Forward everything else (like the public chat) to next-intl
     return intlProxy(req);
 });
 
