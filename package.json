@@ -9,8 +9,11 @@
     "lint": "next lint",
     "prepare": "husky",
     "typecheck": "tsc --noEmit --project tsconfig.husky.json",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.43",
@@ -38,8 +41,10 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^20",
     "@types/pg": "^8.18.0",
@@ -49,10 +54,10 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.7",
     "husky": "^9.1.7",
-    "jsdom": "^29.0.0",
+    "jsdom": "^24.1.1",
     "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.2"
   }
 }
