@@ -1,20 +1,43 @@
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown'
+import { markdownStyles } from '@/constants/styles'
 
 interface MarkdownBlockProps {
-    content: string;
+    content: string
 }
 
 export function MarkdownBlock({ content }: MarkdownBlockProps) {
     return (
         <ReactMarkdown
             components={{
-                a: ({ node, ...props }) => <a {...props} className="text-blue-500 hover:text-blue-400 underline" target="_blank" rel="noopener noreferrer" />,
-                p: ({ node, ...props }) => <p {...props} className="m-0 leading-relaxed" />,
-                ul: ({ node, ...props }) => <ul {...props} className="list-disc pl-5 m-0 space-y-0" />,
-                li: ({ node, ...props }) => <li {...props} className="m-0" />
+                a: ({ node, ...props }) => (
+                    <a
+                        {...props}
+                        className={markdownStyles.link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    />
+                ),
+                p: ({ node, ...props }) => (
+                    <p
+                        {...props}
+                        className={markdownStyles.paragraph}
+                    />
+                ),
+                ul: ({ node, ...props }) => (
+                    <ul
+                        {...props}
+                        className={markdownStyles.list}
+                    />
+                ),
+                li: ({ node, ...props }) => (
+                    <li
+                        {...props}
+                        className={markdownStyles.listItem}
+                    />
+                )
             }}
         >
             {content}
         </ReactMarkdown>
-    );
+    )
 }

@@ -1,19 +1,30 @@
+import { ReactNode } from 'react'
+import { FlexContainer } from '@/components/ui/FlexContainer'
+import { buttonStyles } from '@/constants/styles'
+
 interface SocialButtonProps {
-    href: string;
-    title: string;
-    children: React.ReactNode;
+    href: string
+    title: string
+    children: ReactNode
 }
 
-export function SocialButton({ href, title, children }: SocialButtonProps) {
+export function SocialButton({ 
+    href, 
+    title, 
+    children 
+}: SocialButtonProps) {
     return (
-        <a
+        <FlexContainer
+            as='a'
             href={href}
-            target="_blank"
-            rel="noopener noreferrer"
+            target='_blank'
+            rel='noopener noreferrer'
             title={title}
-            className="flex items-center justify-center size-8 rounded-lg bg-gray-100 dark:bg-[#283039] text-gray-500 dark:text-[#9dabb9] hover:bg-[#137fec] hover:text-white dark:hover:bg-[#137fec] dark:hover:text-white transition-all hover:scale-110"
+            alignItems='center'
+            justifyContent='center'
+            className={buttonStyles.social}
         >
             {children}
-        </a>
-    );
+        </FlexContainer>
+    )
 }

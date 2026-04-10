@@ -1,83 +1,86 @@
-'use client';
+'use client'
+import { useChat } from '@ai-sdk/react'
+import { useEffect, useState, useRef } from 'react'
+import { ChatHeader } from '@/components/chat/ChatHeader'
+import { MessageBubble } from '@/components/chat/MessageBubble'
+import { TypingIndicator } from '@/components/chat/TypingIndicator'
+import { QuickActionsMenu } from '@/components/chat/QuickActionsMenu'
+import { ChatInputForm } from '@/components/chat/ChatInputForm'
+import { TrainingDisclaimer } from './TrainingDisclaimer'
+import { useTranslations } from 'next-intl'
+import { FlexContainer } from '@/components/ui/FlexContainer'
+import { Typography } from '@/components/ui/Typography'
+import { mergeClasses } from '@/lib/utils'
+import { surfaceStyles, typographyStyles } from '@/constants/styles'
 
-import { useChat } from '@ai-sdk/react';
-import { useEffect, useState, useRef } from 'react';
-import { ChatHeader } from '@/components/chat/ChatHeader';
-import { MessageBubble } from '@/components/chat/MessageBubble';
-import { TypingIndicator } from '@/components/chat/TypingIndicator';
-import { QuickActionsMenu } from '@/components/chat/QuickActionsMenu';
-import { ChatInputForm } from '@/components/chat/ChatInputForm';
-import { TrainingDisclaimer } from './TrainingDisclaimer';
-import { useTranslations } from 'next-intl';
-
-const avatar = '/avatar.jpg';
-const avatarAI = '/avatar_mAIo.png';
+const avatar = '/avatar.jpg'
+const avatarAI = '/avatar_mAIo.png'
 
 export function ChatInterface({ visitorId }: { visitorId: string }) {
-    const [mounted, setMounted] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    const [currentDate, setCurrentDate] = useState('');
-    const chatTranslations = useTranslations('ChatInterface');
+    const [mounted, setMounted] = useState(false)
+    const [inputValue, setInputValue] = useState('')
+    const [currentDate, setCurrentDate] = useState('')
+    const chatTranslations = useTranslations('ChatInterface')
     const [activeVisitorId, setActiveVisitorId] = useState(visitorId || '')
-
-    // STATE: Holds the welcome message. Defaults to generic text for server-side rendering.
-    const [visitorFirstName, setVisitorFirstName] = useState('Visitante');
-
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [visitorFirstName, setVisitorFirstName] = useState('Visitante')
+    const messagesEndRef = useRef<HTMLDivElement>(null)
 
     const { messages, setMessages, sendMessage, status } = useChat({
-        api: '/api/chat',
-    } as any);
+        api: '/api/chat'
+    } as any)
 
-    // EFFECT (BACKUP): Save chat history to Session Storage whenever it changes
     useEffect(() => {
         if (messages.length > 0) {
             sessionStorage.setItem('mAIo_chat_history', JSON.stringify(messages))
         }
-    }, [messages]);
+    }, [messages])
 
-    // EFFECT (RESTORE): Hydrate chat history from Session Storage on component mount (after language change)
     useEffect(() => {
-        const storedChatHistory = sessionStorage.getItem('mAIo_chat_history');
+        const storedChatHistory = sessionStorage.getItem('mAIo_chat_history')
         if (storedChatHistory) {
             try {
                 const parsedHistory = JSON.parse(storedChatHistory)
                 setMessages(parsedHistory)
             } catch (error) {
-                console.error("Error to parse chat history. ", error);
+                console.error('Error to parse chat history. ', error)
             }
         }
-    }, []);
+    }, [])
 
     const scrollBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
 
     useEffect(() => {
-        scrollBottom();
-    }, [messages]);
+        scrollBottom()
+    }, [messages])
 
     useEffect(() => {
-        // HYDRATION: Read visitor name from local storage and update the welcome message
         const storedName = localStorage.getItem('mAIo_visitorName')
         const storedId = localStorage.getItem('mAIo_visitorId')
+
         if (storedName) {
             const firstName = storedName.split(' ')[0].toUpperCase()
-            setVisitorFirstName(firstName);
+            setVisitorFirstName(firstName)
         }
+
         if (storedId) {
             setActiveVisitorId(storedId)
         }
 
-        const now = new Date();
+        const now = new Date()
         const formatted = new Intl.DateTimeFormat('pt-BR', {
-            day: '2-digit', month: '2-digit', year: 'numeric',
-            hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
-        }).format(now);
-        setCurrentDate(formatted);
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZoneName: 'short'
+        }).format(now)
 
-        setMounted(true);
-    }, []);
+        setCurrentDate(formatted)
+        setMounted(true)
+    }, [])
 
     const handleQuickAction = (action: string) => {
         if (action) {
@@ -86,50 +89,73 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                 { body: { visitorId: activeVisitorId } }
             )
         }
-    };
+    }
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         if (inputValue.trim()) {
-            sendMessage({ text: inputValue }, { body: { visitorId: activeVisitorId } })
-            setInputValue('');
+            sendMessage(
+                { text: inputValue },
+                { body: { visitorId: activeVisitorId } }
+            )
+            setInputValue('')
         }
-    };
+    }
 
-    if (!mounted) return null;
+    if (!mounted) return null
 
-    const isAITyping = (status === 'submitted' || status === 'streaming') && messages[messages.length - 1]?.role === 'user';
+    const isAITyping =
+        (status === 'submitted' || status === 'streaming') &&
+        messages[messages.length - 1]?.role === 'user'
 
     return (
-        <div className="bg-gray-100 dark:bg-custom_bg-alt font-sans text-gray-900 dark:text-white overflow-hidden h-screen w-full flex justify-center transition-colors duration-300">
-            <div className="flex flex-col w-full max-w-[1024px] h-full bg-white dark:bg-custom_bg-main shadow-2xl border-x border-gray-200 dark:border-custom_surface relative transition-colors duration-300">
+        <FlexContainer
+            justifyContent='center'
+            className={mergeClasses('overflow-hidden h-screen w-full', surfaceStyles.mainWrapper)}
+        >
+            <FlexContainer
+                direction='col'
+                className={mergeClasses('relative', surfaceStyles.chatContainer)}
+            >
                 <ChatHeader avatarUrl={avatar} />
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50 dark:bg-custom_bg-alt scroll-smooth transition-colors duration-300">
-                    <div className="flex justify-center">
-                        <span className="text-xs font-medium text-gray-500 dark:text-custom_text-secondary bg-gray-200 dark:bg-custom_surface px-3 py-1 rounded-full transition-colors">Hoje</span>
-                    </div>
-
-                    {/* IMPLEMENTATION: Injecting the dynamic welcome message state */}
+                <FlexContainer
+                    direction='col'
+                    className={mergeClasses('space-y-6', surfaceStyles.chatBody)}
+                >
+                    <FlexContainer justifyContent='center'>
+                        <Typography
+                            as='span'
+                            size='xs'
+                            weight='medium'
+                            color='muted'
+                            className={typographyStyles.dateBadge}
+                        >
+                            Hoje
+                        </Typography>
+                    </FlexContainer>
                     <MessageBubble
                         isUser={false}
                         content={chatTranslations('welcomeMessage', { name: visitorFirstName })}
                         currentDate={currentDate}
                         avatarAI={avatarAI}
                     />
-                    {messages.map((m) => (
+                    {messages.map((message) => (
                         <MessageBubble
-                            key={m.id}
-                            isUser={m.role === 'user'}
-                            content={(m as any).content}
-                            parts={m.parts}
+                            key={message.id}
+                            isUser={message.role === 'user'}
+                            content={(message as any).content}
+                            parts={message.parts}
                             currentDate={currentDate}
                             avatarAI={avatarAI}
                         />
                     ))}
                     {isAITyping && <TypingIndicator avatarAI={avatarAI} />}
-                    <div ref={messagesEndRef} className="h-px w-full" />
-                </div>
-                <div className="flex flex-col gap-3 p-4 bg-white dark:bg-custom_bg-main border-t border-gray-200 dark:border-custom_surface shrink-0 z-20 transition-colors duration-300">
+                    <div ref={messagesEndRef} className='h-px w-full' />
+                </FlexContainer>
+                <FlexContainer
+                    direction='col'
+                    className={mergeClasses('gap-3', surfaceStyles.chatFooter)}
+                >
                     <QuickActionsMenu onAction={handleQuickAction} />
                     <ChatInputForm
                         inputValue={inputValue}
@@ -138,8 +164,8 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                         disabled={status !== 'ready'}
                     />
                     <TrainingDisclaimer />
-                </div>
-            </div>
-        </div>
-    );
+                </FlexContainer>
+            </FlexContainer>
+        </FlexContainer>
+    )
 }

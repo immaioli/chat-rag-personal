@@ -1,19 +1,33 @@
 'use client'
-
-import { LogOut } from 'lucide-react'
 import { signOut } from 'next-auth/react'
+import { LogOut } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
+import { Typography } from '@/components/ui/Typography'
+import { iconStyles, buttonStyles } from '@/constants/styles'
 
 export function LogOutButton() {
+    const handleLogoutAction = async () => {
+        await signOut({ callbackUrl: '/login' })
+    }
     return (
-        <button
-            onClick={() => {
-                const absoluteUrl = `${window.location.origin}/system/login`
-                signOut({ callbackUrl: absoluteUrl })
-            }}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 hover:text-red-400 rounded-lg transition-colors border border-red-500/20 text-sm font-semibold shadow-sm"
+        <Button
+            onClick={handleLogoutAction}
+            variant='ghost'
+            size='default'
+            className={buttonStyles.sidebarAction}
+            title='Sign Out'
         >
-            <LogOut className='w-4 h-4' />
-            <span>Sign Out</span>
-        </button>
+            <LogOut
+                className={iconStyles.sm + ' text-custom_text-muted'}
+            />
+            <Typography
+                as='span'
+                size='sm'
+                weight='medium'
+                color='default'
+            >
+                Sign Out
+            </Typography>
+        </Button>
     )
 }

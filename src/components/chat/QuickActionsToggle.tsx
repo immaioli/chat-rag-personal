@@ -1,27 +1,53 @@
-import { ChevronDown, Menu } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { ChevronDown, Menu } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/Button'
+import { Typography } from '@/components/ui/Typography'
+import { mergeClasses } from '@/lib/utils'
+import { 
+    buttonStyles, 
+    typographyStyles, 
+    iconStyles 
+} from '@/constants/styles'
 
 interface QuickActionsToggleProps {
-    isOpen: boolean;
-    onClick: () => void;
+    isOpen: boolean
+    onClick: () => void
 }
 
-export function QuickActionsToggle({ isOpen, onClick }: QuickActionsToggleProps) {
-    const quickActionsTranslations = useTranslations('QuickActions');
+export function QuickActionsToggle({ 
+    isOpen, 
+    onClick 
+}: QuickActionsToggleProps) {
+    const quickActionsTranslations = useTranslations('QuickActions')
     return (
-        <button
+        <Button
             onClick={onClick}
-            type="button"
-            className="flex w-full h-11 items-center justify-between px-4 rounded-xl bg-gray-50 dark:bg-custom_surface hover:bg-gray-100 dark:hover:bg-custom_surface-hover border border-gray-200 dark:border-custom_border transition-all"
+            type='button'
+            variant='ghost'
+            className={buttonStyles.quickActionsToggle}
         >
-            <span className="text-gray-700 dark:text-white text-sm font-medium flex items-center gap-2 transition-colors">
-                <Menu size={18} className="text-gray-500 dark:text-custom_text-muted" />
+            <Typography 
+                as='span' 
+                size='sm' 
+                weight='medium' 
+                className={typographyStyles.toggleLabel}
+            >
+                <Menu 
+                    size={18} 
+                    className={iconStyles.muted} 
+                />
                 {quickActionsTranslations('title')}
-            </span>
+            </Typography>
             <ChevronDown
                 size={18}
-                className={`text-gray-500 dark:text-custom_text-muted transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                className={mergeClasses(
+                    iconStyles.muted,
+                    iconStyles.animated,
+                    isOpen 
+                        ? 'rotate-180' 
+                        : 'rotate-0'
+                )}
             />
-        </button>
-    );
+        </Button>
+    )
 }

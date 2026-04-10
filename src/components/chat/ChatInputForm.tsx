@@ -1,35 +1,57 @@
-import { Send } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Send } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { FlexContainer } from '@/components/ui/FlexContainer'
+import { Button } from '@/components/ui/Button'
+import { 
+    surfaceStyles, 
+    inputStyles, 
+    buttonStyles, 
+    iconStyles 
+} from '@/constants/styles'
 
 interface ChatInputFormProps {
-    inputValue: string;
-    setInputValue: (val: string) => void;
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    disabled: boolean;
+    inputValue: string
+    setInputValue: (value: string) => void
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
+    disabled: boolean
 }
 
-export function ChatInputForm({ inputValue, setInputValue, onSubmit, disabled }: ChatInputFormProps) {
-    const translate = useTranslations('ChatInterface');
-
+export function ChatInputForm({ 
+    inputValue, 
+    setInputValue, 
+    onSubmit, 
+    disabled 
+}: ChatInputFormProps) {
+    const translate = useTranslations('ChatInterface')
     return (
-        <form onSubmit={onSubmit} className="flex gap-3 items-center max-w-full">
-            <div className="flex-1 bg-gray-100 dark:bg-custom_surface rounded-xl flex items-center px-4 h-12 border border-transparent focus-within:border-custom_primary focus-within:bg-white dark:focus-within:bg-custom_surface transition-colors shadow-sm">
+        <FlexContainer 
+            as='form' 
+            onSubmit={onSubmit} 
+            alignItems='center' 
+            className='gap-3 max-w-full'
+        >
+            <FlexContainer 
+                alignItems='center' 
+                className={surfaceStyles.chatInput}
+            >
                 <input
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    onChange={(event) => setInputValue(event.target.value)}
                     disabled={disabled}
-                    className="bg-transparent border-none focus:ring-0 text-gray-900 dark:text-white w-full placeholder-gray-400 dark:placeholder-custom_text-placeholder text-sm outline-none"
+                    className={inputStyles.chat}
                     placeholder={translate('inputPlaceholder')}
-                    type="text"
+                    type='text'
                 />
-            </div>
-            <button
-                type="submit"
+            </FlexContainer>
+            <Button
+                type='submit'
                 disabled={disabled || !inputValue.trim()}
-                className="bg-custom_primary text-white p-3 rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-custom_primary/20 disabled:opacity-50"
+                variant='default'
+                className={buttonStyles.send}
+                title='Send Message'
             >
-                <Send size={20} />
-            </button>
-        </form>
-    );
+                <Send className={iconStyles.md} />
+            </Button>
+        </FlexContainer>
+    )
 }

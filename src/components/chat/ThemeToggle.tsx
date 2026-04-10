@@ -1,15 +1,27 @@
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { Button } from '@/components/ui/Button'
+import { buttonStyles } from '@/constants/styles'
 
 export function ThemeToggle() {
-    const { theme, setTheme } = useTheme();
-
+    const { theme, setTheme } = useTheme()
     return (
-        <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="flex size-10 border border-gray-200 dark:border-[#283039] cursor-pointer items-center justify-center rounded-lg bg-gray-100 dark:bg-[#283039] text-gray-600 dark:text-white hover:bg-gray-200 dark:hover:bg-[#323b46] transition-colors"
+        <Button
+            onClick={() => setTheme(theme === 'dark'
+                ? 'light'
+                : 'dark'
+            )}
+            variant='ghost'
+            className={buttonStyles.themeToggle}
         >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-    );
+            {theme === 'dark'
+                ? (
+                    <Sun size={20} />
+                )
+                : (
+                    <Moon size={20} />
+                )
+            }
+        </Button>
+    )
 }

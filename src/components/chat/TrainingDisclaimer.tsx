@@ -1,15 +1,36 @@
-import { Info } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { Info } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { FlexContainer } from '@/components/ui/FlexContainer'
+import { Typography } from '@/components/ui/Typography'
+import { mergeClasses } from '@/lib/utils'
+import {
+    layoutStyles,
+    iconStyles,
+    typographyStyles,
+} from '@/constants/styles'
 
 export function TrainingDisclaimer() {
-    const chatTranslations = useTranslations('ChatInterface');
-
+    const chatTranslations = useTranslations('ChatInterface')
     return (
-        <div className="flex items-center justify-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity cursor-default">
-            <Info className="w-8 h-8 text-red-600 dark:text-red-600 animate-pulse" />
-            <p className="text-left font-semibold text-gray-500 dark:text-custom_text-muted text-[20px] transition-colors leading-tight">
+        <FlexContainer
+            alignItems='center'
+            justifyContent='center'
+            className={layoutStyles.disclaimer}
+        >
+            <Info
+                className={mergeClasses(
+                    iconStyles.xlg,
+                    iconStyles.disclaimer
+                )}
+            />
+            <Typography
+                as='p'
+                weight='semibold'
+                color='muted'
+                className={typographyStyles.disclaimer}
+            >
                 {chatTranslations('disclaimer')}
-            </p>
-        </div>
-    );
+            </Typography>
+        </FlexContainer>
+    )
 }

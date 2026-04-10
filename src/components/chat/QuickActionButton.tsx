@@ -1,22 +1,42 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
+import { Typography } from '@/components/ui/Typography'
+import {
+    buttonStyles,
+    iconStyles,
+    typographyStyles
+} from '@/constants/styles'
 
 interface QuickActionButtonProps {
-    label: string;
-    Icon: LucideIcon;
-    onClick: () => void;
+    label: string
+    Icon: LucideIcon
+    onClick: () => void
 }
 
-export function QuickActionButton({ label, Icon, onClick }: QuickActionButtonProps) {
+export function QuickActionButton({
+    label,
+    Icon,
+    onClick
+}: QuickActionButtonProps) {
     return (
-        <button
+        <Button
             onClick={onClick}
-            type="button"
-            className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-[#283039] hover:bg-gray-50 dark:hover:bg-[#323b46] active:bg-[#137fec] transition-colors text-left group"
+            type='button'
+            variant='ghost'
+            className={buttonStyles.quickAction}
         >
-            <Icon size={18} className="text-gray-500 dark:text-[#9dabb9] group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
-            <span className="text-gray-700 dark:text-white text-sm font-medium group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+            <Icon
+                size={18}
+                className={iconStyles.quickAction}
+            />
+            <Typography
+                as='span'
+                size='sm'
+                weight='medium'
+                className={typographyStyles.quickAction}
+            >
                 {label}
-            </span>
-        </button>
-    );
+            </Typography>
+        </Button>
+    )
 }

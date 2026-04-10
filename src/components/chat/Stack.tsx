@@ -1,22 +1,45 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react'
+import { FlexContainer } from '@/components/ui/FlexContainer'
+import { Typography } from '@/components/ui/Typography'
+import { typographyStyles } from '@/constants/styles'
 
 interface StackProps {
-    Icon: LucideIcon;
-    label: string;
-    iconColor: string;
-    showSeparator?: boolean;
+    Icon: LucideIcon
+    label: string
+    iconColor: string
+    showSeparator?: boolean
 }
 
-export function Stack({ Icon, label, iconColor, showSeparator = true }: StackProps) {
+export function Stack({
+    Icon,
+    label,
+    iconColor,
+    showSeparator = true
+}: StackProps) {
     return (
         <>
-            <span className="flex items-center gap-1">
-                <Icon size={12} className={iconColor} />
+            <FlexContainer
+                as='span'
+                alignItems='center'
+                className='gap-1'
+            >
+                <Icon
+                    size={12}
+                    className={iconColor}
+                />
                 {label}
-            </span>
-            {showSeparator && (
-                <span className="text-gray-300 dark:text-[#3d4650]">|</span>
-            )}
+            </FlexContainer>
+            {showSeparator
+                ? (
+                    <Typography
+                        as='span'
+                        className={typographyStyles.separator}
+                    >
+                        |
+                    </Typography>
+                )
+                : null
+            }
         </>
-    );
+    )
 }

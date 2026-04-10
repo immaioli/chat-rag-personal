@@ -1,18 +1,40 @@
+import { FlexContainer } from '@/components/ui/FlexContainer'
+import { Typography } from '@/components/ui/Typography'
+
 interface MessageInfoProps {
-    isUser: boolean;
-    currentDate: string;
-    nameUser?: string;
+    isUser: boolean
+    currentDate: string
+    nameUser?: string
 }
 
-export function MessageInfo({ isUser, currentDate, nameUser }: MessageInfoProps) {
+export function MessageInfo({ 
+    isUser, 
+    currentDate, 
+    nameUser 
+}: MessageInfoProps) {
     return (
-        <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                {isUser ? nameUser : 'mAIo'}
-            </span>
-            <span className="text-xs text-gray-500 dark:text-custom_text-muted">
+        <FlexContainer 
+            alignItems='center' 
+            className='gap-2 mb-1'
+        >
+            <Typography 
+                as='span' 
+                size='sm' 
+                weight='semibold' 
+                color='default'
+            >
+                {isUser 
+                    ? nameUser 
+                    : 'mAIo'
+                }
+            </Typography>
+            <Typography 
+                as='span' 
+                size='xs' 
+                color='muted'
+            >
                 {currentDate}
-            </span>
-        </div>
-    );
+            </Typography>
+        </FlexContainer>
+    )
 }
