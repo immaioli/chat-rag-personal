@@ -22,8 +22,8 @@ export default async function RootLayout({ children, params }: { children: React
                     {/* Theme provider: Dark mode injection */}
                     <ThemeProvider
                         attribute='class'
-                        defaultTheme='dark'
-                        enableSystem={false}
+                        defaultTheme='system'
+                        enableSystem
                     >
                         {children}
                     </ThemeProvider>

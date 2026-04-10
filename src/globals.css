@@ -1,65 +1,28 @@
-/* Imports the highly optimized Tailwind v4 engine */
 @import "tailwindcss";
 
-/* 
-  Enable manual dark mode toggling driven by a CSS selector
-  This allows next-themes to inject the.dark class on the <html> tag.
-*/
-@custom-variant dark (&:where(.dark, .dark *));
-
-/* Define custom design tokens and theme variables directly in CSS */
-@import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 @theme {
-  /*  */
-
-  /* =========================================
-   * BRAND IDENTITY
-   * Using 'custom_' prefix for clear distinction
-   * ========================================= */
-  --color-custom_primary: #137fec;
-  --color-custom_primary-hover: #106bc7;
-
-  /* =========================================
-   * DARK MODE SEMANTIC PALETTE
-   * ========================================= */
-
-  /* Backgrounds */
-  --color-custom_bg-main: #111418;
-  --color-custom_bg-alt: #101922;
-  --color-custom_bg-dark: #1e2329;
-
-  /* Surfaces: Cards, Modals, Menus */
-  --color-custom_surface: #283039;
-  --color-custom_surface-hover: #323b46;
-  --color-custom_surface-inset: #0f1216;
-  --color-custom_surface-badge: #1a2027;
-
-  /* Borders & Dividers */
-  --color-custom_border: #3d4650;
-
-  /* Typography Colors */
-  --color-custom_text-muted: #9dabb9;
-  --color-custom_text-quaternary: #4f5b69;
-  --color-custom_text-placeholder: #5a6b7c;
-
-  /* =========================================
-   * CUSTOM SIZING & TYPOGRAPHY SCALES
-   * ========================================= */
-  --text-custom_xxs: 0.625rem;
-  /* 10px */
-  --text-custom_15px: 0.9375rem;
-  /* 15px */
+  --variant-dark: .dark &;
 }
 
-@media (prefers-color-scheme: dark) {
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
   :root {
-    --color-background: #0a0a0a;
-    --color-foreground: #ededed;
+    --color-background: #ffffff;
+    --color-foreground: #111827;
   }
-}
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  .dark {
+    --color-background: #030712;
+    --color-foreground: #ffffff;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    transition-property: color, background-color;
+    transition-duration: 300ms;
+  }
 }
