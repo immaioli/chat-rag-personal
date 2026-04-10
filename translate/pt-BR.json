@@ -20,8 +20,10 @@
         "summary": "Resumo",
         "experience": "Experiência",
         "education": "Graduação",
-        "skills": "Habilidades",
+        "skills": "Habilidade",
         "portfolio": "Portfólio",
+        "language": "Idioma",
+        "resume": "Currículo / Carta de apresentação",
         "contact": "Contato"
     },
     "TechStack": {

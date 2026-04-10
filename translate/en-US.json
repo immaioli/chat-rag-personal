@@ -20,8 +20,10 @@
         "summary": "Summary",
         "experience": "Experience",
         "education": "Education",
-        "skills": "Skills",
+        "skills": "Skill",
         "portfolio": "Portfolio",
+        "language": "Language",
+        "resume": "Resume / Cover Letter",
         "contact": "Contact"
     },
     "TechStack": {
