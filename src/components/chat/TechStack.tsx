@@ -13,17 +13,15 @@ import { useTranslations } from 'next-intl'
 import { FlexContainer } from '@/components/ui/FlexContainer'
 import { layoutStyles } from '@/constants/styles'
 
-export function TechStack() {
+import { mergeClasses } from '@/lib/utils'
+
+export function TechStack({ className }: { className?: string }) {
     const translate = useTranslations('TechStack')
     return (
         <FlexContainer 
-            direction='col' 
-            className='gap-1 mt-1.5 min-w-0'
+            alignItems='center' 
+            className={mergeClasses(layoutStyles.stackRow, 'gap-1 mt-1.5 min-w-0', className)}
         >
-            <FlexContainer 
-                alignItems='center' 
-                className={layoutStyles.stackRow}
-            >
                 <Stack 
                     Icon={Code2} 
                     label='JavaScript' 
@@ -43,13 +41,7 @@ export function TechStack() {
                     Icon={Server} 
                     label='Node.js' 
                     iconColor='text-green-600 dark:text-green-500' 
-                    showSeparator={false} 
                 />
-            </FlexContainer>
-            <FlexContainer 
-                alignItems='center' 
-                className={layoutStyles.stackRow}
-            >
                 <Stack 
                     Icon={Smartphone} 
                     label='React Native' 
@@ -66,7 +58,6 @@ export function TechStack() {
                     iconColor='text-red-500 dark:text-red-400' 
                 />
                 <TooltipAdd text={translate('tooltip')} />
-            </FlexContainer>
         </FlexContainer>
     )
 }

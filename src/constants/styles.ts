@@ -266,8 +266,8 @@ export const layoutStyles = {
       flexContain: 'flex-1 min-w-0 gap-3',
       fullContain: 'flex-1 min-w-0 w-full',
       formSection: 'flex flex-col gap-2',
-      inlineBaseline: 'flex items-baseline gap-2',
-      header: 'sm:flex-row sm:items-center shrink-0 z-20 gap-4 px-4 sm:px-6 py-4',
+      inlineBaseline: 'flex flex-col md:flex-row md:items-baseline gap-0 md:gap-2',
+      header: 'shrink-0 z-20 gap-4 px-4 md:px-6 py-4',
       headerActions: 'self-end sm:self-auto shrink-0 gap-3 mt-2 sm:mt-0',
       languageSection: 'items-center gap-3 mb-2',
       quickActionsGrid: `${BG_BASE_100} ${DARK_BORDER_MAIN}`,
@@ -373,13 +373,13 @@ export const typographyStyles = {
       dateBadge: 'px-3 py-1 ' +
             `rounded-full ${BG_BASE_200} ${DARK_BG_SURFACE} ` +
             'transition-colors',
-      disclaimer: 'text-left text-[20px] leading-tight ' +
+      disclaimer: 'text-left text-xs md:text-sm leading-tight ' +
             'transition-colors',
       headerSubtitle: 'mt-0.5 whitespace-nowrap ' +
             'text-xs sm:text-sm ' +
             'transition-colors',
-      headerTitle: 'truncate ' +
-            'text-base sm:text-lg leading-tight ' +
+      headerTitle: 'whitespace-normal ' +
+            'text-sm md:text-base lg:text-lg leading-tight ' +
             'transition-colors',
       infoBannerText: 'leading-none ' +
             `${TEXT_ACCENT_600} ${DARK_TEXT_ACCENT_MUTED} text-base text-justify`,

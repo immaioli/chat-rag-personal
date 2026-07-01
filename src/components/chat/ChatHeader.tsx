@@ -1,3 +1,6 @@
+'use client'
+import { useState, useRef, useEffect } from 'react'
+import { Menu } from 'lucide-react'
 import { Logo } from './Logo'
 import { Avatar } from '@/components/ui/Avatar'
 import { TechStack } from './TechStack'
@@ -13,7 +16,9 @@ import {
     layoutStyles,
     animationStyles,
     typographyStyles,
-    dividerStyles
+    dividerStyles,
+    buttonStyles,
+    popoverStyles
 } from '@/constants/styles'
 
 interface ChatHeaderProps {
@@ -21,15 +26,29 @@ interface ChatHeaderProps {
 }
 
 export function ChatHeader({ avatarUrl }: ChatHeaderProps) {
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const menuRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false)
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
     return (
         <FlexContainer
             as='header'
-            direction='col'
+            alignItems='center'
             justifyContent='between'
             className={mergeClasses(
                 surfaceStyles.header,
                 layoutStyles.header,
-                animationStyles.transition
+                animationStyles.transition,
+                'flex-wrap'
             )}
         >
             <FlexContainer
@@ -67,18 +86,48 @@ export function ChatHeader({ avatarUrl }: ChatHeaderProps) {
                                 {'<Full-Stack Engineer>'}
                             </Typography>
                         </FlexContainer>
-                        <TechStack />
+                        <TechStack className="hidden md:flex" />
                     </FlexContainer>
                 </FlexContainer>
             </FlexContainer>
             <FlexContainer
                 alignItems='center'
-                className={layoutStyles.headerActions}
+                className={`${layoutStyles.headerActions} hidden md:flex`}
             >
                 <SocialLinks />
                 <LanguageSelector />
                 <ThemeToggle />
             </FlexContainer>
+
+            {/* Mobile Actions Menu */}
+            <div className="relative flex md:hidden shrink-0" ref={menuRef}>
+                <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className={mergeClasses(buttonStyles.themeToggle, 'flex items-center justify-center')}
+                    aria-label="Menu"
+                >
+                    <Menu size={20} />
+                </button>
+
+                {isMenuOpen && (
+                    <div className={mergeClasses(
+                        surfaceStyles.popover, 
+                        popoverStyles.base, 
+                        popoverStyles.layouts.col, 
+                        'absolute right-0 top-full mt-0 items-center min-w-[200px]',
+                        'border-blue-600 dark:border-blue-600'
+                    )}>
+                        <SocialLinks />
+                        <Divider className={dividerStyles.horizontal} />
+                        <LanguageSelector />
+                        <Divider className={dividerStyles.horizontal} />
+                        <ThemeToggle />
+                    </div>
+                )}
+            </div>
+
+            {/* Mobile TechStack */}
+            <TechStack className="flex md:hidden w-full mt-1" />
         </FlexContainer>
     )
 }

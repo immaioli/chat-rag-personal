@@ -16,6 +16,7 @@ import { FlexContainer } from '@/components/ui/FlexContainer'
 import { PopoverPanel } from '@/components/ui/PopoverPanel'
 import { GridContainer } from '@/components/ui/GridContainer'
 import { layoutStyles } from '@/constants/styles'
+import { mergeClasses } from '@/lib/utils'
 
 const quickActionsConfig = [
     { id: 'summary', icon: CircleStar },
@@ -46,7 +47,7 @@ export function QuickActionsMenu({ onAction }: { onAction: (action: string) => v
             {isOpen
                 ? (
                     <PopoverPanel
-                        className={layoutStyles.quickActionsMenu}
+                        className={mergeClasses(layoutStyles.quickActionsMenu, 'border-blue-600 dark:border-blue-600')}
                         position='top'
                     >
                         <GridContainer
