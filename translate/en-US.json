@@ -1,0 +1,32 @@
+{
+    "WelcomeModal": {
+        "title": "Welcome",
+        "description": "Please, choose your language and identify yourself.",
+        "langLabel": "Language",
+        "name_ph": "Your Name (Required)",
+        "company_ph": "Company (Optional)",
+        "disclaimer": "By entering, you agree that messages sent on this platform will be stored exclusively for the purpose of auditing, analyzing, and continuously improving this Artificial Intelligence model.",
+        "button_load": "Starting Brain...",
+        "button_default": "Enter Chat"
+    },
+    "ChatInterface": {
+        "today": "Today",
+        "welcomeMessage": "Hello, **{name}**! I'm mAIo, the Artificial Intelligence of Irineu Marcelo MAIOLI's portfolio. I was trained to briefly tell you about his professional journey, projects, skills, and other relevant information.\n\nSince I was just launched and am in my version 1.0.0, our interaction right now will happen through the quick topics.\n\nBut my development doesn't stop here! For my next updates, the idea is to include:  \n• A text field for you to write your messages;  \n• Audio recording support, allowing voice conversations;  \n• Full integration with LLMs for a more fluid and less robotic conversation;  \n• And other news... like, maybe, becoming an animated assistant. Who knows?\n\nTo get started, choose one of the quick topics below!",
+        "inputPlaceholder": "Or type your message here...",
+        "disclaimer": "mAIo is an AI in continuous evolution and may make mistakes."
+    },
+    "QuickActions": {
+        "title": "Select a quick topic",
+        "summary": "Summary",
+        "experience": "Experience",
+        "education": "Education",
+        "skills": "Skill",
+        "portfolio": "Portfolio",
+        "language": "Language",
+        "resume": "Resume / Cover Letter",
+        "contact": "Contact"
+    },
+    "TechStack": {
+        "tooltip": "I am constantly learning new stacks"
+    }
+}

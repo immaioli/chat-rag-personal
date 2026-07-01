@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@theme {
+  --variant-dark: .dark &;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --color-background: #ffffff;
+    --color-foreground: #111827;
+  }
+
+  .dark {
+    --color-background: #030712;
+    --color-foreground: #ffffff;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    transition-property: color, background-color;
+    transition-duration: 300ms;
+  }
+}

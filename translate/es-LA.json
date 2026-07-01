@@ -1,0 +1,32 @@
+{
+    "WelcomeModal": {
+        "title": "Bienvenido(a)",
+        "description": "Por favor, elige tu idioma y preséntate.",
+        "langLabel": "Idioma",
+        "name_ph": "Tu Nombre (Requerido)",
+        "company_ph": "Empresa (Opcional)",
+        "disclaimer": "Al entrar, aceptas que los mensajes enviados en esta plataforma serán almacenados exclusivamente para fines de auditoría, análisis y mejora continua de este modelo de Inteligencia Artificial.",
+        "button_load": "Iniciando Cerebro...",
+        "button_default": "Entrar en la Conversación"
+    },
+    "ChatInterface": {
+        "today": "Hoy",
+        "welcomeMessage": "¡Hola, **{name}**! Soy mAIo, la Inteligencia Artificial del portafolio de Irineu Marcelo MAIOLI. Fui entrenado para contarte, resumidamente, sobre su trayectoria profesional, proyectos, habilidades y otra información relevante.\n\nComo acabo de ser lanzado y estoy en mi versión 1.0.0, nuestra interacción en este primer momento será a través de los temas rápidos.\n\n¡Pero mi desarrollo no se detiene aquí! Para mis próximas actualizaciones, la idea es incluir:  \n• Campo de texto para que escribas tus mensajes;  \n• Soporte para grabación de audio, permitiendo conversaciones por voz;  \n• Integración completa con LLMs para una conversación más fluida y menos robotizada;  \n• Y otras novedades... como, tal vez, convertirme en un asistente animado. ¿Quién sabe?\n\nPara comenzar, ¡elige uno de los temas rápidos a continuación!",
+        "inputPlaceholder": "O escribe tu mensaje aquí...",
+        "disclaimer": "mAIo es una IA en continua evolución y puede cometer errores."
+    },
+    "QuickActions": {
+        "title": "Seleccione un tema rápido",
+        "summary": "Resumen",
+        "experience": "Experiencia",
+        "education": "Educación",
+        "skills": "Habilidad",
+        "portfolio": "Portafolio",
+        "language": "Idioma",
+        "resume": "Currículum / Carta de presentación",
+        "contact": "Contacto"
+    },
+    "TechStack": {
+        "tooltip": "Estoy en constante aprendizaje de nuevas stacks"
+    }
+}

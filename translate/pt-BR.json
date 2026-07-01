@@ -1,0 +1,32 @@
+{
+    "WelcomeModal": {
+        "title": "Bem-vindo(a)",
+        "description": "Por favor, escolha o seu idioma e identifique-se.",
+        "langLabel": "Idioma",
+        "name_ph": "Seu Nome (Obrigatório)",
+        "company_ph": "Empresa (Opcional)",
+        "disclaimer": "Ao entrar, você concorda que as mensagens enviadas nesta plataforma serão armazenadas exclusivamente para fins de auditoria, análise e aprimoramento contínuo deste modelo de Inteligência Artificial.",
+        "button_load": "Iniciando Cérebro...",
+        "button_default": "Entrar na Conversa"
+    },
+    "ChatInterface": {
+        "today": "Hoje",
+        "welcomeMessage": "Olá, **{name}**! Eu sou o mAIo, a Inteligência Artificial do portfólio do Irineu Marcelo MAIOLI. Fui treinado para lhe contar, resumidamente, sobre a trajetória profissional dele, projetos, habilidades e outras informações relevantes.\n\nComo acabei de ser lançado e estou na minha versão 1.0.0, nossa interação neste primeiro momento acontecerá por meio dos tópicos rápidos.\n\nMas o meu desenvolvimento não para por aqui! Para as minhas próximas atualizações, a ideia é incluir:  \n• Campo de texto para você escrever as suas mensagens;  \n• Suporte à gravação de áudio, permitindo conversas por voz;  \n• Integração completa com LLMs para uma conversa mais fluida e menos robotizada;  \n• E outras novidades... como, talvez, me tornar um assistente animado. Quem sabe?\n\nPara começarmos, escolha um dos tópicos rápidos abaixo!",
+        "inputPlaceholder": "Ou digite sua mensagem aqui...",
+        "disclaimer": "O mAIo é uma IA em contínua evolução e pode cometer equívocos."
+    },
+    "QuickActions": {
+        "title": "Selecione um tópico rápido",
+        "summary": "Resumo",
+        "experience": "Experiência",
+        "education": "Graduação",
+        "skills": "Habilidade",
+        "portfolio": "Portfólio",
+        "language": "Idioma",
+        "resume": "Currículo / Carta de apresentação",
+        "contact": "Contato"
+    },
+    "TechStack": {
+        "tooltip": "Estou em constante aprendizado de outras stacks"
+    }
+}
