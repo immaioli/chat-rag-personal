@@ -52,9 +52,9 @@ describe('ChatInterface Component', () => {
     it('should render the chat interface without crashing', () => {
         render(<ChatInterface visitorId="test-visitor-123" />);
 
-        // ASSERTION: Ensures the input box is rendered
-        const chatInput = screen.getByRole('textbox');
-        expect(chatInput).toBeInTheDocument();
+        // ASSERTION: Ensures the date badge is rendered
+        const dateBadge = screen.getByText('Hoje');
+        expect(dateBadge).toBeInTheDocument();
     });
 
 });

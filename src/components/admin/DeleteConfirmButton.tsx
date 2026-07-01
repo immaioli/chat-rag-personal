@@ -25,7 +25,6 @@ export function DeleteConfirmButton({ visitorIdentifier }: DeleteConfirmButtonPr
         try {
             await deleteVisitorConversation(visitorIdentifier)
         } catch (error) {
-            console.error('Failed to delete', error)
             setIsDeleting(false)
             setIsConfirming(false)
         }

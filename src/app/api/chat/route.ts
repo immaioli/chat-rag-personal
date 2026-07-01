@@ -1,111 +1,120 @@
-import { google } from "@ai-sdk/google";
-import { streamText, embed } from "ai";
-import { PrismaClient } from "@prisma/client";
-import { Pool } from "pg";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { systemPrompt } from "./config";
+import * as Sentry from '@sentry/nextjs'
 
-// CONFIGURATION: Prisma adapter setup for connection pooling
-const connectionString = process.env.DATABASE_URL;
-const pool = new Pool({ connectionString });
-const adapter = new PrismaPg(pool as any);
-const prisma = new PrismaClient({ adapter });
+interface MessagePart {
+    text: string
+}
 
-export async function POST(req: Request) {
+interface MessageItem {
+    role: string
+    content?: string
+    parts?: MessagePart[]
+}
+
+export async function POST(requestPayload: Request) {
     try {
-        const payload = await req.json();
-        
-        // DEBUG: Print the exact payload arriving from the frontend
-        console.log("📥 [DEBUG API] Payload received:", JSON.stringify(payload, null, 2));
-
-        const { messages, visitorId } = payload;
-
-        // SAFEGUARD 1: Check for visitor ID
-        if (!visitorId) {
-            console.error("❌ [DEBUG API] 400 Error: visitorId is missing!");
-            return new Response('Missing visitorId', { status: 400 });
+        const payload = await requestPayload.json()
+        if (!payload || typeof payload !== 'object') {
+            return new Response(JSON.stringify({ error: 'Invalid payload' }), { status: 400 })
         }
 
-        // DATA NORMALIZATION: Formatting messages to comply with Vercel AI SDK CoreMessage schema
-        const formattedMessages = messages.map((messageItem: any) => {
-            let textContext = messageItem.content;
-            if (!textContext && messageItem.parts) {
-                textContext = messageItem.parts.map((partItem: any) => partItem.text).join(' ');
-            }
-            return {
-                role: messageItem.role,
-                content: textContext || '',
-            };
-        });
+        const { messages, visitorId } = payload
 
-        const lastUserMessage = formattedMessages[formattedMessages.length - 1].content;
-
-        if (!lastUserMessage || !lastUserMessage.trim()) {
-            return new Response('Empty message content', { status: 400 });
+        if (!visitorId || typeof visitorId !== 'string') {
+            return new Response(JSON.stringify({ error: 'Missing or invalid visitorId' }), { status: 400 })
         }
 
-        // DATABASE (USER): Save the incoming user question immediately
-        await prisma.chatMessage.create({
-            data: {
-                visitorId: visitorId,
-                role: 'user',
-                content: lastUserMessage,
+        if (!Array.isArray(messages) || messages.length === 0) {
+            return new Response(JSON.stringify({ error: 'Missing or empty messages array' }), { status: 400 })
+        }
+
+        const formattedMessages = messages.map((messageItem: MessageItem) => ({
+            role: messageItem.role,
+            content: messageItem.content || (messageItem.parts?.map(partItem => partItem.text).join(' ')) || ''
+        }))
+
+        const lastUserMessage = formattedMessages[formattedMessages.length - 1]?.content?.trim()
+
+        if (!lastUserMessage) {
+            return new Response(JSON.stringify({ error: 'Empty message content' }), { status: 400 })
+        }
+
+        const refererUrl = requestPayload.headers.get('referer') || ''
+        let userLocale: 'pt-BR' | 'en-US' | 'es-LA' = 'pt-BR'
+
+        if (refererUrl.includes('/en-US')) {
+            userLocale = 'en-US'
+        } else if (refererUrl.includes('/es-LA')) {
+            userLocale = 'es-LA'
+        }
+
+        let finalNlgResponse = ''
+        const fallbackErrorMessage = 'I am currently experiencing technical difficulties. Please try again later.'
+
+        try {
+            const apiResponse = await fetch('https://api.maioli.dev.br/chat-rag-personal-classifier-api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: lastUserMessage,
+                    locale: userLocale
+                })
+            })
+
+            if (!apiResponse.ok) {
+                throw new Error(`API responded with status ${apiResponse.status}`)
             }
-        });
 
-        // EMBEDDING: Transform the user's question into a vector for semantic search
-        const { embedding } = await embed({
-            model: google.embeddingModel(process.env.GOOGLE_EMBEDDING_MODEL || 'text-embedding-004'),
-            value: lastUserMessage
-        });
+            const responseData = await apiResponse.json()
+            finalNlgResponse = responseData.response || fallbackErrorMessage
+        } catch (fetchError) {
+            console.error('Failed to fetch from classifier API:', fetchError)
+            finalNlgResponse = fallbackErrorMessage
+        }
 
-        // VECTOR SEARCH: Query PostgreSQL for the most relevant context
-        const vectorQuery = `[${embedding.join(',')}]`;
-        const relevantKnowledge = await prisma.$queryRaw`
-            SELECT content
-            FROM "Knowledge"
-            ORDER BY vector <=> ${vectorQuery}::vector
-            LIMIT 3;
-        ` as { content: string }[];
+        const stream = new ReadableStream({
+            async start(controller) {
+                const encoder = new TextEncoder()
+                const words = finalNlgResponse.split(' ')
+                const messageId = 'msg_' + Date.now()
+                const partId = 'part_' + Date.now()
 
-        const retrievedContext = relevantKnowledge.map((knowledgeItem) => knowledgeItem.content).join('\n\n');
-        
-        // DYNAMIC PROMPT: Combine the base system prompt with the retrieved database context
-        const contextAwareSystemPrompt = `${systemPrompt}\n\n[CONTEXT RETRIEVED FROM THE DATABASE TO GROUND THE RESPONSE]:\n${retrievedContext}`;
+                controller.enqueue(encoder.encode(`data: {"type":"start","messageId":"${messageId}"}\n\n`))
+                controller.enqueue(encoder.encode(`data: {"type":"text-start","id":"${partId}"}\n\n`))
 
-        // AI GENERATION & BACKGROUND PROCESSING: Stream the response back to the client
-        const result = streamText({
-            model: google('gemini-2.5-flash'),
-            system: contextAwareSystemPrompt, 
-            messages: formattedMessages,
-            
-            // ASYNC CALLBACK: Executes in the background after the stream finishes sending to the frontend.
-            // This is the Next.js equivalent of a lightweight message queue worker.
-            async onFinish({ text }) {
-                try {
-                    // DATABASE (AI): Save the AI's generated response
-                    await prisma.chatMessage.create({
-                        data: {
-                            visitorId: visitorId,
-                            role: 'assistant',
-                            content: text,
-                        }
-                    });
+                for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+                    const chunk = (wordIndex === 0 ? '' : ' ') + words[wordIndex]
+                    controller.enqueue(encoder.encode(`data: {"type":"text-delta","id":"${partId}","delta":${JSON.stringify(chunk)}}\n\n`))
 
-                    // ARCHITECTURE NOTE: If deploying on a persistent Docker container, 
-                    // this is the exact spot where you would publish the message to RabbitMQ:
-                    // rabbitMqChannel.sendToQueue('chat_logs', Buffer.from(JSON.stringify({ visitorId, prompt: lastUserMessage, response: text })));
-                    
-                } catch (dbError) {
-                    console.error('[DATABASE ERROR] Failed to save AI response:', dbError);
+                    // 30ms delay between words to simulate AI text generation
+                    await new Promise(resolve => setTimeout(resolve, 30))
                 }
+
+                controller.enqueue(encoder.encode(`data: {"type":"text-end","id":"${partId}"}\n\n`))
+                controller.enqueue(encoder.encode(`data: {"type":"finish"}\n\n`))
+                controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
+
+                controller.close()
             }
-        });
+        })
 
-        return result.toUIMessageStreamResponse();
+        return new Response(stream, {
+            status: 200,
+            headers: {
+                'Content-Type': 'text/event-stream; charset=utf-8',
+                'Cache-Control': 'no-cache, no-transform',
+                'X-Content-Type-Options': 'nosniff',
+                'x-vercel-ai-ui-message-stream': 'v1'
+            }
+        })
 
-    } catch (error) {
-        console.log('Error in chat route: ', error);
-        return new Response('Internal Server Error', { status: 500 });
+    } catch (serverError) {
+        Sentry.captureException(serverError)
+        console.error('❌ [SERVER ERROR]:', serverError)
+        return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        })
     }
 }

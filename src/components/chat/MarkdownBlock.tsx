@@ -6,6 +6,10 @@ interface MarkdownBlockProps {
 }
 
 export function MarkdownBlock({ content }: MarkdownBlockProps) {
+    // Process plain URLs into markdown autolinks if they aren't already wrapped
+    // The regex matches 'http...' that starts at the beginning of a line or after a space/newline
+    const processedContent = content.replace(/(^|\s)(https?:\/\/[^\s]+)/g, '$1<$2>')
+
     return (
         <ReactMarkdown
             components={{
@@ -37,7 +41,7 @@ export function MarkdownBlock({ content }: MarkdownBlockProps) {
                 )
             }}
         >
-            {content}
+            {processedContent}
         </ReactMarkdown>
     )
 }

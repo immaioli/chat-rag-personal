@@ -47,3 +47,5 @@ next-env.d.ts
 .vscode
 /playwright-report
 /test-results
+# Sentry Config File
+.env.sentry-build-plugin

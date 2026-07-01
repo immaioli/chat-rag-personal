@@ -18,7 +18,6 @@ export async function deleteVisitorConversation(visitorIdentifier: string) {
         
         return { success: true };
     } catch (error) {
-        console.error("[SERVER ACTION ERROR] Failed to delete conversation:", error);
         return { success: false, error: "Failed to delete" };
     }
 }

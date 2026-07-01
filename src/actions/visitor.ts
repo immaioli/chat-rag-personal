@@ -13,7 +13,6 @@ export async function registerVisitor(name: string, company: string) {
 
         return { success: true, visitorId: visitor.id }
     } catch (error) {
-        console.error('Error registering visitor: ', error)
         return { success: false, error: 'Failed to register' }
     }
 }

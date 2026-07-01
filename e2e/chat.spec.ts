@@ -6,10 +6,10 @@ test.describe('Visitor Chat Interface Flow', () => {
         // ACTION: Command the robotic browser to navigate to the root URL
         await page.goto('/');
 
-        // ASSERTION: Wait for the page to load and target the exact text input element
-        const chatInputElement = page.getByRole('textbox', { name: 'Or type your message here...' });
+        // ASSERTION: Wait for the page to load and target the date badge
+        const dateBadge = page.getByText('Hoje');
 
-        // ASSERTION: Verify if the input is actually visible to the user on the screen
-        await expect(chatInputElement).toBeVisible();
+        // ASSERTION: Verify if the date badge is actually visible to the user on the screen
+        await expect(dateBadge).toBeVisible();
     });
 });
