@@ -11,7 +11,7 @@
     },
     "ChatInterface": {
         "today": "Hoje",
-        "welcomeMessage": "Olá, **{name}**! Eu sou o mAIo, a Inteligência Artificial do portfólio do Irineu. Fui treinado para lhe contar tudo sobre a trajetória profissional dele, os seus projetos de destaque e as suas principais habilidades técnicas. Sinta-se à vontade para escolher um dos tópicos rápidos abaixo ou digitar a sua pergunta!",
+        "welcomeMessage": "Olá, **{name}**! Eu sou o mAIo, a Inteligência Artificial do portfólio do Irineu Marcelo MAIOLI. Fui treinado para lhe contar, resumidamente, sobre a trajetória profissional dele, projetos, habilidades e outras informações relevantes.\n\nComo acabei de ser lançado e estou na minha versão 1.0.0, nossa interação neste primeiro momento acontecerá por meio dos tópicos rápidos.\n\nMas o meu desenvolvimento não para por aqui! Para as minhas próximas atualizações, a ideia é incluir:  \n• Campo de texto para você escrever as suas mensagens;  \n• Suporte à gravação de áudio, permitindo conversas por voz;  \n• Integração completa com LLMs para uma conversa mais fluida e menos robotizada;  \n• E outras novidades... como, talvez, me tornar um assistente animado. Quem sabe?\n\nPara começarmos, escolha um dos tópicos rápidos abaixo!",
         "inputPlaceholder": "Ou digite sua mensagem aqui...",
         "disclaimer": "O mAIo é uma IA em contínua evolução e pode cometer equívocos."
     },
