@@ -21,7 +21,7 @@ const rateLimiter = new Ratelimit({
 const intlProxy = createIntlMiddleware(routing)
 
 // SECURITY: Added async to support the Redis await call
-export const proxy = auth(async (req) => {
+export const proxy = auth(async (req: any) => {
     const pathname = req.nextUrl.pathname
     const isLoggedIn = !!req.auth
 

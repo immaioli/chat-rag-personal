@@ -10,7 +10,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials) {
+            async authorize(credentials: any) {
                 // SECURITY: Validate credentials against environment variables
                 // In a real scenario, use process.env.ADMIN_EMAIL and process.env.ADMIN_PASSWORD
                 const adminEmail = process.env.ADMIN_EMAIL || "admin@maioli.dev.br";
@@ -31,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     callbacks: {
         // SESSION: Ensure the session token is securely passed
-        async session({ session, token }) {
+        async session({ session, token }: { session: any, token: any }) {
             if (token && session.user) {
                 session.user.id = token.sub as string;
             }
