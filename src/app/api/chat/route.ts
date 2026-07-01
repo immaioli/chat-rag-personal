@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs'
+import { prisma } from '../../../../backend/db/prisma'
 
 interface MessagePart {
     text: string
@@ -71,6 +72,29 @@ export async function POST(requestPayload: Request) {
         } catch (fetchError) {
             console.error('Failed to fetch from classifier API:', fetchError)
             finalNlgResponse = fallbackErrorMessage
+        }
+
+        try {
+            // Persist User Message
+            await prisma.chatMessage.create({
+                data: {
+                    role: 'user',
+                    content: lastUserMessage,
+                    visitorId: visitorId
+                }
+            })
+
+            // Persist AI Response
+            await prisma.chatMessage.create({
+                data: {
+                    role: 'assistant',
+                    content: finalNlgResponse,
+                    visitorId: visitorId
+                }
+            })
+        } catch (dbError) {
+            console.error('Failed to persist messages to DB:', dbError)
+            Sentry.captureException(dbError)
         }
 
         const stream = new ReadableStream({
