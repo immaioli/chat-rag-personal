@@ -4,6 +4,8 @@ import { prisma } from '../../../backend/db/prisma';
 import { LogOutButton } from '@/components/admin/LogoutButton';
 
 // Server Component acting as an internal Admin Dashboard
+export const dynamic = 'force-dynamic';
+
 export default async function SystemDashboard() {
     // QUERY: Fetch visitors and their complete chat history
     const visitors = await prisma.visitor.findMany({
