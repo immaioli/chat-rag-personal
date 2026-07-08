@@ -52,7 +52,7 @@ export async function POST(requestPayload: Request) {
         const fallbackErrorMessage = 'I am currently experiencing technical difficulties. Please try again later.'
 
         try {
-            const apiResponse = await fetch('https://api.maioli.dev.br/chat-rag-personal-classifier-api', {
+            const apiResponse = await fetch(process.env.CLASSIFIER_API_URL as string, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
