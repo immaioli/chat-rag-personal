@@ -18,6 +18,7 @@ const avatarAI = '/avatar_mAIo.png'
 
 export function ChatInterface({ visitorId }: { visitorId: string }) {
     const [mounted, setMounted] = useState(false)
+    const [isProcessingAiResponse, setIsProcessingAiResponse] = useState(false)
     // const [inputValue, setInputValue] = useState('')
     const chatTranslations = useTranslations('ChatInterface')
     const [activeVisitorId] = useState(() => {
@@ -87,9 +88,25 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         return () => clearTimeout(timer)
     }, [])
 
+    // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
+    const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string } }) => {
+        if (isProcessingAiResponse) return
+        
+        setIsProcessingAiResponse(true)
+        
+        try {
+            // EXECUTE CHAT API CALL
+            await sendMessage(payload, options)
+        } catch (requestError) {
+            console.error('Chat request failed:', requestError)
+        } finally {
+            setIsProcessingAiResponse(false)
+        }
+    }
+
     const handleQuickAction = (action: string) => {
         if (action) {
-            sendMessage(
+            handleSendMessage(
                 { text: action },
                 { body: { visitorId: activeVisitorId } }
             )
