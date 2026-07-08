@@ -51,8 +51,17 @@ export async function POST(requestPayload: Request) {
         let finalNlgResponse = ''
         const fallbackErrorMessage = 'I am currently experiencing technical difficulties. Please try again later.'
 
+        // EXTRACT THE API URL FROM THE ENVIRONMENT
+        const classifierApiUrl = process.env.CLASSIFIER_API_URL
+
+        // PREVENT EXECUTION IF THE URL IS NOT CONFIGURED
+        if (!classifierApiUrl) {
+            console.error('Missing CLASSIFIER_API_URL in environment variables')
+            return new Response(JSON.stringify({ error: 'Internal Configuration Error' }), { status: 500 })
+        }
+
         try {
-            const apiResponse = await fetch(process.env.CLASSIFIER_API_URL as string, {
+            const apiResponse = await fetch(classifierApiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
