@@ -88,6 +88,17 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         return () => clearTimeout(timer)
     }, [])
 
+    useEffect(() => {
+        // 10 minutes (10 * 60 * 1000 ms)
+        const timeoutId = setTimeout(() => {
+            localStorage.clear()
+            sessionStorage.clear()
+            window.location.reload()
+        }, 600000)
+
+        return () => clearTimeout(timeoutId)
+    }, [messages])
+
     // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
     const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string } }) => {
         if (isProcessingAiResponse) return
