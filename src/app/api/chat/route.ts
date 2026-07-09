@@ -49,7 +49,12 @@ export async function POST(requestPayload: Request) {
         }
 
         let finalNlgResponse = ''
-        const fallbackErrorMessage = 'I am currently experiencing technical difficulties. Please try again later.'
+        const fallbackErrorMessages = {
+            'pt-BR': 'No momento estou passando por dificuldades técnicas. Por favor, tente novamente mais tarde.',
+            'en-US': 'I am currently experiencing technical difficulties. Please try again later.',
+            'es-LA': 'Actualmente estoy experimentando dificultades técnicas. Por favor, inténtelo de nuevo más tarde.'
+        }
+        const fallbackErrorMessage = fallbackErrorMessages[userLocale] || fallbackErrorMessages['en-US']
 
         // EXTRACT THE API URL FROM THE ENVIRONMENT
         const classifierApiUrl = process.env.CLASSIFIER_API_URL
@@ -80,6 +85,7 @@ export async function POST(requestPayload: Request) {
             finalNlgResponse = responseData.response || fallbackErrorMessage
         } catch (fetchError) {
             console.error('Failed to fetch from classifier API:', fetchError)
+            Sentry.captureException(fetchError)
             finalNlgResponse = fallbackErrorMessage
         }
 
