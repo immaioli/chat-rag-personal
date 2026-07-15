@@ -90,6 +90,21 @@ export async function POST(requestPayload: Request) {
         }
 
         try {
+            // Check if visitor exists to avoid Prisma P2003 Foreign Key error
+            const existingVisitor = await prisma.visitor.findUnique({
+                where: { id: visitorId }
+            })
+
+            if (!existingVisitor) {
+                await prisma.visitor.create({
+                    data: {
+                        id: visitorId,
+                        name: 'Visitante',
+                        company: ''
+                    }
+                })
+            }
+
             // Persist User Message
             await prisma.chatMessage.create({
                 data: {
