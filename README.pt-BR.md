@@ -57,6 +57,49 @@ O projeto foi construído sobre uma arquitetura moderna e escalável, pensada pa
 - **Autenticação Admin:** [NextAuth.js v5](https://authjs.dev/)
 - **Monitoramento:** [Sentry](https://sentry.io/)
 
+### 🏗️ Arquitetura Corporativa (C4 Model)
+
+Este diagrama ilustra as fronteiras centrais e responsabilidades da aplicação principal, atuando como o cérebro primário que orquestra a recuperação de contexto e as interações com a IA.
+
+```mermaid
+graph LR
+    %% Custom Styles inspired by modern flowcharts
+    classDef actor fill:#fef08a,stroke:#ca8a04,stroke-width:2px,rx:10,ry:10,color:#000;
+    classDef core fill:#fed7aa,stroke:#ea580c,stroke-width:2px,rx:10,ry:10,color:#000;
+    classDef external fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,rx:15,ry:15,color:#000;
+    classDef data fill:#fce7f3,stroke:#db2777,stroke-width:2px,rx:15,ry:15,color:#000;
+
+    subgraph "Fluxo Principal da Aplicação (chat-rag-personal)"
+        direction LR
+        
+        Visitor["👤 Visitante"]:::actor
+        
+        CoreApp["🚀 App Next.js<br/>(UI + BFF + AI SDK)"]:::core
+        
+        Visitor -- "① Envia mensagem" --> CoreApp
+        
+        subgraph DataLayer ["Dados & Estado"]
+            direction TB
+            Redis[("Upstash Redis")]:::data
+            DB[("PostgreSQL + pgvector")]:::data
+        end
+        
+        CoreApp -- "② Rate Limiting" --> Redis
+        CoreApp -- "③ Recupera Contexto" --> DB
+        
+        subgraph AI_Providers ["LLMs Externos"]
+            direction TB
+            OpenAI["OpenAI API"]:::external
+            Groq["Groq API"]:::external
+        end
+        
+        CoreApp -- "④ Inferência por Stream" --> OpenAI
+        CoreApp -- "⑤ Roteamento Rápido" --> Groq
+        
+        CoreApp -- "⑥ Stream na UI" --> Visitor
+    end
+```
+
 ---
 
 ## 💻 Para Desenvolvedores e Contribuidores

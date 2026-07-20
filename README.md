@@ -25,6 +25,7 @@ Through **mAIo** (Maioli's Portfolio Artificial Intelligence), visitors, recruit
 The current technological landscape demands more than functional solutions; it demands memorable experiences. The mAIo Assistant Chat was designed to prove that the combination of **modern software engineering, exceptional design, and Artificial Intelligence** can create interfaces that don't just inform, but enchant.
 
 ### For Recruiters and Reviewers
+
 This project is the materialization of advanced Full-Stack Development skills. From orchestrating vector databases (`pgvector`) for semantic search to building a responsive and internationalized UI (`next-intl`), mAIo demonstrates maturity in stack selection, software architecture, security (Rate Limiting), and observability (Sentry).
 
 ## ✨ Current Features
@@ -57,6 +58,49 @@ The project was built on a modern, scalable architecture, designed for developer
 - **Admin Auth:** [NextAuth.js v5](https://authjs.dev/)
 - **Monitoring:** [Sentry](https://sentry.io/)
 
+### 🏗️ Enterprise Architecture (C4 Model)
+
+This diagram illustrates the core boundaries and responsibilities of the main application, acting as the primary brain orchestrating context retrieval and AI interactions.
+
+```mermaid
+graph LR
+    %% Custom Styles inspired by modern flowcharts
+    classDef actor fill:#fef08a,stroke:#ca8a04,stroke-width:2px,rx:10,ry:10,color:#000;
+    classDef core fill:#fed7aa,stroke:#ea580c,stroke-width:2px,rx:10,ry:10,color:#000;
+    classDef external fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,rx:15,ry:15,color:#000;
+    classDef data fill:#fce7f3,stroke:#db2777,stroke-width:2px,rx:15,ry:15,color:#000;
+
+    subgraph "Main Application Flow (chat-rag-personal)"
+        direction LR
+        
+        Visitor["👤 Visitor"]:::actor
+        
+        CoreApp["🚀 Next.js App<br/>(UI + BFF + AI SDK)"]:::core
+        
+        Visitor -- "① Sends message" --> CoreApp
+        
+        subgraph DataLayer ["Data & State"]
+            direction TB
+            Redis[("Upstash Redis")]:::data
+            DB[("PostgreSQL + pgvector")]:::data
+        end
+        
+        CoreApp -- "② Rate Limiting" --> Redis
+        CoreApp -- "③ Context Retrieval" --> DB
+        
+        subgraph AI_Providers ["External LLMs"]
+            direction TB
+            OpenAI["OpenAI API"]:::external
+            Groq["Groq API"]:::external
+        end
+        
+        CoreApp -- "④ Stream Inference" --> OpenAI
+        CoreApp -- "⑤ Fast Routing" --> Groq
+        
+        CoreApp -- "⑥ Stream UI" --> Visitor
+    end
+```
+
 ---
 
 ## 💻 For Developers and Contributors
@@ -64,6 +108,7 @@ The project was built on a modern, scalable architecture, designed for developer
 If you want to explore the code, clone the project, or run the local environment, the setup process was designed to be friendly and straightforward.
 
 ### Prerequisites
+
 - Node.js (v18+)
 - Docker and Docker Compose (for the database and Redis)
 - Git
@@ -71,18 +116,21 @@ If you want to explore the code, clone the project, or run the local environment
 ### Installation Step-by-Step
 
 1. **Clone the Repository:**
+
    ```bash
    git clone https://github.com/irineumaioli/chat-rag-personal.git
    cd chat-rag-personal
    ```
 
 2. **Install Dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Start the Containers (PostgreSQL and Redis):**
    Ensures your local environment has the databases ready to use.
+
    ```bash
    docker compose up -d
    ```
@@ -94,15 +142,18 @@ If you want to explore the code, clone the project, or run the local environment
    - `AUTH_SECRET` and Admin Credentials
 
 5. **Prepare the Database (Prisma):**
+
    ```bash
    npx prisma generate
    npx prisma db push
    ```
 
 6. **Start the Development Server:**
+
    ```bash
    npm run dev
    ```
+
    *Access [http://localhost:3000](http://localhost:3000) and interact with the assistant! The system will automatically adjust the language based on your browser's locale.*
 
 ---
