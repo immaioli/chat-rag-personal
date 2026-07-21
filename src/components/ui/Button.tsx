@@ -1,58 +1,34 @@
-import { ButtonHTMLAttributes, forwardRef } from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { mergeClasses } from '@/lib/utils'
-import { buttonStyles } from '@/constants/styles'
+import React, { ButtonHTMLAttributes } from 'react'
 
-const buttonVariants = cva(
-    buttonStyles.base,
-    {
-        variants: {
-            variant: {
-                default: buttonStyles.variantDefault,
-                ghost: buttonStyles.variantGhost,
-                ghostDestructive: buttonStyles.variantGhostDestructive,
-            },
-            size: {
-                default: 'px-4 py-2',
-                sm: 'px-3 py-1.5 text-sm',
-                lg: 'px-6 py-3 text-lg',
-                icon: 'p-2'
-            }
-        },
-        defaultVariants: {
-            variant: 'default',
-            size: 'default',
-        }
-    }
-)
+// Extended interface for custom button properties defining variants and loading state
+interface ButtonProperties extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variantStyle?: 'primary' | 'secondary' | 'danger'
+  isLoadingState?: boolean
+}
 
-export interface ButtonProps extends
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> { }
+export function Button({ variantStyle = 'primary', isLoadingState = false, children, ...restProperties }: ButtonProperties) {
+  // Define base style shared across all variants ensuring structural scalability
+  const baseButtonStyle = 'flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-all active:scale-95'
+  
+  // Resolve variant specific classes mapping to the design system tokens
+  const primaryStyle = 'bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-600/20'
+  const secondaryStyle = 'bg-gray-100 text-gray-900 hover:bg-gray-200 border border-gray-200'
+  const dangerStyle = 'bg-red-500 text-white hover:bg-red-600'
+  
+  // Conditionally apply the correct style based on the variant prop
+  let appliedVariantStyle = primaryStyle
+  if (variantStyle === 'secondary') {
+    appliedVariantStyle = secondaryStyle
+  } else if (variantStyle === 'danger') {
+    appliedVariantStyle = dangerStyle
+  }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-    ({
-        className,
-        variant,
-        size,
-        ...elementProperties
-    }, forwardedReference) => {
-        return (
-            <button
-                className={mergeClasses(
-                    buttonVariants({
-                        variant,
-                        size,
-                        className
-                    })
-                )}
-                ref={forwardedReference}
-                {...elementProperties}
-            />
-        )
-    }
-)
+  // Combine styles safely and handle the loading state visual changes
+  const combinedClasses = `${baseButtonStyle} ${appliedVariantStyle} ${isLoadingState ? 'opacity-50 pointer-events-none' : ''}`
 
-Button.displayName = 'Button'
-
-export { Button, buttonVariants }
+  return (
+    <button className={combinedClasses} disabled={isLoadingState} {...restProperties}>
+      {isLoadingState ? <span>Carregando...</span> : children}
+    </button>
+  )
+}

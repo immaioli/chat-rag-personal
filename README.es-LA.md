@@ -43,6 +43,26 @@ mAIo se encuentra actualmente en la versión 1.0.0. La visión a largo plazo es 
 - **Integración Profunda con LLM:** Cambio de modelos sin fricción para generar conversaciones aún más naturales y menos robóticas.
 - **Asistente Animado:** Implementación de un avatar animado en 3D o 2D interactivo que gesticula y reacciona de acuerdo con las respuestas del chat, llevando la inmersión al siguiente nivel.
 
+## 📁 Estructura del Proyecto
+
+Este proyecto sigue una estructura modular y escalable utilizando el App Router de Next.js:
+
+```text
+chat-rag-personal/
+├── src/
+│   ├── app/                         # Enrutamiento principal, páginas y endpoints de API (BFF)
+│   │   ├── api/chat/                # Endpoint principal para manejar interacciones de IA y streaming
+│   │   ├── system/                  # 🛡️ Panel de Telemetría (monitorear, verificar, auditar interacciones)
+│   │   └── [locale]/                # Rutas dinámicas para la internacionalización (en-US, pt-BR, es-LA)
+│   ├── components/                  # Componentes React reutilizables (UI, chat, panel de administración)
+│   ├── actions/                     # Server Actions para el envío de formularios y mutaciones de datos
+│   └── i18n/                        # Configuración de internacionalización y diccionarios de traducción
+├── prisma/                          # Definición del esquema de la base de datos (schema.prisma) y migraciones
+├── backend/                         # Lógica de negocio central, servicios y clientes de bases de datos
+├── package.json                     # Dependencias del proyecto y scripts
+└── tsconfig.json                    # Configuración de TypeScript
+```
+
 ---
 
 ## 🛠️ Arquitectura y Tech Stack
