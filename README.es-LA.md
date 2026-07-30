@@ -20,6 +20,8 @@ Bienvenido a **mAIo Assistant Chat**, el portafolio interactivo de **Irineu Marc
 
 A través de **mAIo** (Inteligencia Artificial del Portafolio Maioli), visitantes, reclutadores y desarrolladores pueden conversar con una IA entrenada para presentar mi trayectoria profesional, habilidades técnicas y proyectos desarrollados de manera fluida, inteligente y dinámica. El objetivo es transformar la lectura pasiva de un currículum en una experiencia inmersiva y responsiva.
 
+Esta versión inicial (v1.0.0) presenta una interfaz guiada por temas (NLG). Esta es una decisión de ingeniería intencional, de nivel senior, diseñada para controlar estrictamente el consumo de tokens del LLM (FinOps) y evitar el agotamiento de la API (Rate Limits) en un entorno público, garantizando la máxima estabilidad y costos predecibles.
+
 ## 🌟 ¿Por qué mAIo?
 
 El panorama tecnológico actual exige más que soluciones funcionales; exige experiencias memorables. El mAIo Assistant Chat fue diseñado para demostrar que la combinación de **ingeniería de software moderna, diseño excepcional e Inteligencia Artificial** puede crear interfaces que no solo informan, sino que encantan.
@@ -29,16 +31,16 @@ Este proyecto es la materialización de habilidades avanzadas en Full-Stack Deve
 
 ## ✨ Funcionalidades Actuales
 
-- **💬 Chat Conversacional:** Interactúa con temas predefinidos que activan respuestas generadas por IA con un efecto de *streaming* (escritura en tiempo real) para una experiencia orgánica.
+- **💬 Chat Conversacional (NLG):** Interactúa con temas predefinidos que activan respuestas generadas por IA con un efecto de *streaming* (escritura en tiempo real). Este enfoque controlado garantiza alta disponibilidad, cero-downtime y protege la aplicación contra prompt injection y abuso de tokens.
 - **🌍 Internacionalización Completa:** Soporte nativo para Inglés, Portugués y Español, garantizando accesibilidad global.
 - **🛡️ Panel de Telemetría (Admin):** Un área restringida y protegida (`/system`) que monitorea y audita las interacciones de los usuarios con el asistente en tiempo real.
 - **⚡ Rate Limiting Inteligente:** Protección contra abusos implementada directamente a nivel de middleware utilizando Upstash Redis.
 
 ## 🚀 Visión y Roadmap
 
-mAIo se encuentra actualmente en la versión 1.0.0. La visión a largo plazo es transformarlo en un asistente cognitivo completo. Las próximas iteraciones traerán:
+El proyecto sigue una estrategia de lanzamiento progresivo enfocada en la estabilidad y la excelencia operativa. Las próximas iteraciones para la v2.0 introducirán:
 
-- **Campo de Texto Libre:** Permitir a los usuarios hacer cualquier pregunta sobre mi carrera, y el asistente buscará contexto a través de RAG (Retrieval-Augmented Generation) para formular respuestas precisas.
+- **Campo de Texto Libre (True RAG):** Permitirá a los usuarios hacer cualquier pregunta abierta. Cuando se introduzca, la actual capa NLG no quedará obsoleta; en cambio, actuará como un 'Safety Guard' y un proveedor de contexto de fallback altamente confiable para garantizar que el sistema nunca falle bajo carga pesada.
 - **Comandos de Voz e Interacción de Audio:** Romper la barrera de la pantalla hablando con el portafolio usando la voz.
 - **Integración Profunda con LLM:** Cambio de modelos sin fricción para generar conversaciones aún más naturales y menos robóticas.
 - **Asistente Animado:** Implementación de un avatar animado en 3D o 2D interactivo que gesticula y reacciona de acuerdo con las respuestas del chat, llevando la inmersión al siguiente nivel.
