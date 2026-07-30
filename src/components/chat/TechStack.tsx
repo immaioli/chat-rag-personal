@@ -8,7 +8,6 @@ import {
     Mic 
 } from 'lucide-react'
 import { Stack } from './Stack'
-import { TooltipAdd } from './TooltipAdd'
 import { useTranslations } from 'next-intl'
 import { FlexContainer } from '@/components/ui/FlexContainer'
 import { layoutStyles } from '@/constants/styles'
@@ -57,7 +56,6 @@ export function TechStack({ className }: { className?: string }) {
                     label='Voice Assistants' 
                     iconColor='text-red-500 dark:text-red-400' 
                 />
-                <TooltipAdd text={translate('tooltip')} />
         </FlexContainer>
     )
 }

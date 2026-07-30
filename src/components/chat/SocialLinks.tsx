@@ -1,7 +1,6 @@
 import { SocialButton } from './SocialButton'
 import {
     FaLinkedin,
-    FaWhatsapp,
     FaEnvelope
 } from 'react-icons/fa'
 import { FlexContainer } from '@/components/ui/FlexContainer'
@@ -18,12 +17,6 @@ export function SocialLinks() {
                 title='LinkedIn'
             >
                 <FaLinkedin size={20} />
-            </SocialButton>
-            <SocialButton
-                href='https://wa.me/5544999188624'
-                title='WhatsApp'
-            >
-                <FaWhatsapp size={20} />
             </SocialButton>
             <SocialButton
                 href='mailto:irineu_marcelo@outlook.com'
