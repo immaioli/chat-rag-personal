@@ -14,6 +14,5 @@ jobs:
         continue-on-error: true
         run: |
           echo "Sending ping to Frontend URL..."
-          curl -sL https://chat-rag-personal-ten.vercel.app/ > /dev/null
-          # Note: If the URL is hosted on Render, update the URL above to match the actual domain (e.g. https://yourapp.onrender.com)
+          curl -sL https://maio.maioli.dev.br/ > /dev/null
           echo "Ping sent successfully."
