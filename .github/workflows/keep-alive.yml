@@ -1,0 +1,19 @@
+name: Keep Frontend Alive
+
+on:
+  schedule:
+    # Runs every 10 minutes to prevent Render from sleeping
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual execution from the Actions tab
+
+jobs:
+  ping-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Waking up Frontend App
+        continue-on-error: true
+        run: |
+          echo "Sending ping to Frontend URL..."
+          curl -sL https://chat-rag-personal-ten.vercel.app/ > /dev/null
+          # Note: If the URL is hosted on Render, update the URL above to match the actual domain (e.g. https://yourapp.onrender.com)
+          echo "Ping sent successfully."

@@ -28,13 +28,31 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         return visitorId || ''
     })
     
-    const [visitorFirstName] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const storedName = localStorage.getItem('mAIo_visitorName')
-            if (storedName) return storedName.split(' ')[0].toUpperCase()
+    const [hasValidName, setHasValidName] = useState(false)
+    const [visitorFirstName, setVisitorFirstName] = useState('')
+
+    useEffect(() => {
+        const checkAndSetName = () => {
+            if (typeof window !== 'undefined') {
+                const storedName = localStorage.getItem('mAIo_visitorName')
+                if (storedName) {
+                    setVisitorFirstName(storedName.split(' ')[0].toUpperCase())
+                    setHasValidName(true)
+                    return true
+                }
+            }
+            return false
         }
-        return 'Visitante'
-    })
+
+        if (!checkAndSetName()) {
+            const interval = setInterval(() => {
+                if (checkAndSetName()) {
+                    clearInterval(interval)
+                }
+            }, 500)
+            return () => clearInterval(interval)
+        }
+    }, [])
     
     const [currentDate] = useState(() => {
         const now = new Date()
@@ -149,7 +167,11 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                             Hoje
                         </Typography>
                     </FlexContainer>
-                    <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFirstName })} currentDate={currentDate} avatarAI={avatarAI} />
+                    {hasValidName ? (
+                        <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFirstName })} currentDate={currentDate} avatarAI={avatarAI} />
+                    ) : (
+                        <TypingIndicator avatarAI={avatarAI} />
+                    )}
                     {messages?.map((message: { id: string, role: string, parts?: Array<{ type: string, text?: string }> }) => {
                         const extractedText = message.parts?.map((part: { type: string, text?: string }) => (part.type === 'text' ? part.text : '') || '').join('') || ''
                         return (
