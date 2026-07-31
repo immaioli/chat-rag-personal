@@ -14,5 +14,5 @@ jobs:
         continue-on-error: true
         run: |
           echo "Sending ping to Frontend URL..."
-          curl -sL https://maio.maioli.dev.br/ > /dev/null
+          curl -sL https://maio.maioli.dev.br/api/ping > /dev/null
           echo "Ping sent successfully."
