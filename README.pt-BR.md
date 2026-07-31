@@ -79,6 +79,11 @@ O projeto foi construído sobre uma arquitetura moderna e escalável, pensada pa
 - **Autenticação Admin:** [NextAuth.js v5](https://authjs.dev/)
 - **Monitoramento:** [Sentry](https://sentry.io/)
 
+### ⚡ Prevenção de Cold Start & CI/CD
+
+Como parte de uma estratégia otimizada de FinOps (controle de custos), esta aplicação é implantada em instâncias serverless/efêmeras que hibernam (scale to zero) durante períodos de inatividade. Embora financeiramente eficiente, isso introduz a latência de 'Cold Start' na primeira requisição.
+Para contornar essa limitação e garantir uma Experiência do Usuário (UX) imediata e fluida, um pipeline automatizado de CI/CD utilizando GitHub Actions (Cron Jobs) foi arquitetado. Este sistema orquestra requisições de 'ping' direcionadas aos endpoints a cada 10 minutos, mantendo as instâncias 'aquecidas' e contornando o tempo limite de ociosidade do provedor. Esta abordagem demonstra um domínio prático sobre as restrições de infraestrutura em nuvem através de automação direcionada.
+
 ### 🏗️ Arquitetura Corporativa (C4 Model)
 
 Este diagrama ilustra as fronteiras centrais e responsabilidades da aplicação principal, atuando como o cérebro primário que orquestra a recuperação de contexto e as interações com a IA.
