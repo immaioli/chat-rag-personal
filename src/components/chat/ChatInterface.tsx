@@ -21,13 +21,16 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     const [isProcessingAiResponse, setIsProcessingAiResponse] = useState(false)
     // const [inputValue, setInputValue] = useState('')
     const chatTranslations = useTranslations('ChatInterface')
-    const [activeVisitorId] = useState(() => {
+    const getActiveVisitorData = () => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('mAIo_visitorId') || visitorId || ''
+            return {
+                id: localStorage.getItem('mAIo_visitorId') || visitorId || '',
+                name: localStorage.getItem('mAIo_visitorName') || 'Visitante'
+            }
         }
-        return visitorId || ''
-    })
-    
+        return { id: visitorId || '', name: 'Visitante' }
+    }
+
     const [hasValidName, setHasValidName] = useState(false)
     const [visitorFirstName, setVisitorFirstName] = useState('')
 
@@ -118,11 +121,11 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     }, [messages])
 
     // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
-    const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string } }) => {
+    const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string, visitorName?: string } }) => {
         if (isProcessingAiResponse) return
-        
+
         setIsProcessingAiResponse(true)
-        
+
         try {
             // EXECUTE CHAT API CALL
             await sendMessage(payload, options)
@@ -135,9 +138,10 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     const handleQuickAction = (action: string) => {
         if (action) {
+            const visitorData = getActiveVisitorData()
             handleSendMessage(
                 { text: action },
-                { body: { visitorId: activeVisitorId } }
+                { body: { visitorId: visitorData.id, visitorName: visitorData.name } }
             )
         }
     }
@@ -145,9 +149,10 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     // const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     //     event.preventDefault()
     //     if (inputValue.trim()) {
+    //         const visitorData = getActiveVisitorData()
     //         sendMessage(
     //             { text: inputValue },
-    //             { body: { visitorId: activeVisitorId } }
+    //             { body: { visitorId: visitorData.id, visitorName: visitorData.name } }
     //         )
     //         setInputValue('')
     //     }

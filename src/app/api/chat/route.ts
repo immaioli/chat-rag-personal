@@ -18,7 +18,7 @@ export async function POST(requestPayload: Request) {
             return new Response(JSON.stringify({ error: 'Invalid payload' }), { status: 400 })
         }
 
-        const { messages, visitorId } = payload
+        const { messages, visitorId, visitorName } = payload
 
         if (!visitorId || typeof visitorId !== 'string') {
             return new Response(JSON.stringify({ error: 'Missing or invalid visitorId' }), { status: 400 })
@@ -99,7 +99,7 @@ export async function POST(requestPayload: Request) {
                 await prisma.visitor.create({
                     data: {
                         id: visitorId,
-                        name: 'Visitante',
+                        name: visitorName || 'Visitante',
                         company: ''
                     }
                 })

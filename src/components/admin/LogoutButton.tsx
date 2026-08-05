@@ -12,19 +12,19 @@ export function LogOutButton() {
     return (
         <Button
             onClick={handleLogoutAction}
-            variant='ghost'
+            variant='ghostDestructive'
             size='default'
-            className={buttonStyles.sidebarAction}
+            className='w-auto px-4 py-2 gap-2 h-10 shrink-0'
             title='Sign Out'
         >
             <LogOut
-                className={iconStyles.sm + ' text-custom_text-muted'}
+                className={iconStyles.sm}
             />
             <Typography
                 as='span'
                 size='sm'
                 weight='medium'
-                color='default'
+                className='text-inherit'
             >
                 Sign Out
             </Typography>

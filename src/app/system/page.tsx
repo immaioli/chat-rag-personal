@@ -1,4 +1,4 @@
-import { User, Bot, Building2, Calendar } from 'lucide-react';
+import { User, Bot, Building2, Calendar, MessageSquare } from 'lucide-react';
 import { DeleteConfirmButton } from '@/components/admin/DeleteConfirmButton';
 import { prisma } from '../../../backend/db/prisma';
 import { LogOutButton } from '@/components/admin/LogoutButton';
@@ -19,7 +19,7 @@ export default async function SystemDashboard() {
 
     return (
         <div className="p-8 max-w-5xl mx-auto space-y-8">
-            <header className="border-b border-gray-800 pb-6 flex items-center justify-between">
+            <header className="border-b border-gray-800 pb-6 flex items-start justify-between">
                 <div>
                     <h1 className="text-3xl font-bold text-white tracking-tight">System Telemetry</h1>
                     <p className="text-gray-400 mt-2">Real-time monitoring of intercepted AI interactions.</p>
@@ -41,6 +41,12 @@ export default async function SystemDashboard() {
                                     {/* Visitor Header */}
                                     <div className="bg-gray-800/80 p-4 border-b border-gray-700 flex flex-wrap items-center justify-between gap-4">
                                         <div className="flex items-center gap-4">
+                                            {/* Session Badge */}
+                                            <div className="flex items-center gap-2 bg-gray-900 px-3 py-1.5 rounded-md border border-gray-700">
+                                                <MessageSquare className="w-4 h-4 text-green-400" />
+                                                <span className="text-sm font-medium text-gray-300">Conversation Session</span>
+                                            </div>
+                                            {/* Visitor Info */}
                                             <div className="flex items-center gap-2">
                                                 <User className="w-4 h-4 text-blue-400" />
                                                 <span className="font-semibold text-gray-200">{visitor.name}</span>
