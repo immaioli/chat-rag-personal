@@ -13,7 +13,7 @@ import { FlexContainer } from '@/components/ui/FlexContainer'
 import { Typography } from '@/components/ui/Typography'
 import { Button } from '@/components/ui/Button'
 import { mergeClasses } from '@/lib/utils'
-import { surfaceStyles, typographyStyles } from '@/constants/styles'
+import { surfaceStyles, typographyStyles, buttonStyles } from '@/constants/styles'
 
 const avatar = '/avatar.jpg'
 const avatarAI = '/avatar_mAIo.png'
@@ -205,8 +205,10 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                         <Typography as='p' size='md' color='muted'>
                             Sua sessão expirou por inatividade. Deseja iniciar uma nova conversa?
                         </Typography>
-                        <Button onClick={handleRestartSession} variant='primaryForm' className='w-full'>
-                            Reiniciar Conversa
+                        <Button onClick={handleRestartSession} className={buttonStyles.quickAction}>
+                            <Typography as='span' size='sm' weight='medium' className={typographyStyles.quickAction}>
+                                Reiniciar Conversa
+                            </Typography>
                         </Button>
                     </FlexContainer>
                 </FlexContainer>
