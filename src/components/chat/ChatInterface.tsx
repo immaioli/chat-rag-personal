@@ -133,8 +133,34 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         setIsProcessingAiResponse(true)
 
         try {
-            // EXECUTE CHAT API CALL
-            await sendMessage(payload, options)
+            const newUserMessage = {
+                id: 'msg_' + Date.now(),
+                role: 'user' as const,
+                content: payload.text,
+                parts: [{ type: 'text', text: payload.text }]
+            }
+
+            const updatedMessagesList = [...messages, newUserMessage]
+            setMessages(updatedMessagesList as any[])
+
+            const networkResponse = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messages: updatedMessagesList,
+                    ...options.body
+                })
+            })
+
+            if (!networkResponse.ok) {
+                throw new Error('Failed to fetch AI response')
+            }
+
+            const jsonResponseData = await networkResponse.json()
+            setMessages([...updatedMessagesList, jsonResponseData])
+
         } catch (requestError) {
             console.error('Chat request failed:', requestError)
         } finally {
@@ -166,7 +192,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     if (!mounted) return null
 
-    const isAITyping = (status === 'submitted' || status === 'streaming') && messages[messages.length - 1]?.role === 'user'
+    const isAITyping = isProcessingAiResponse && messages[messages.length - 1]?.role === 'user'
 
     return (
         <FlexContainer justifyContent='center' className={mergeClasses('overflow-hidden h-screen w-full', surfaceStyles.mainWrapper)}>

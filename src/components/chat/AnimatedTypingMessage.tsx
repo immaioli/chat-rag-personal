@@ -20,5 +20,7 @@ export function AnimatedTypingMessage({ fullContentText, typingSpeedMilliseconds
         }
     }, [currentCharacterIndex, fullContentText, typingSpeedMilliseconds])
 
-    return <span>{currentlyDisplayedText}</span>
+    const formattedHtmlText = currentlyDisplayedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+
+    return <span dangerouslySetInnerHTML={{ __html: formattedHtmlText }} />
 }
