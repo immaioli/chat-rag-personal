@@ -224,8 +224,8 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                     ) : (
                         <TypingIndicator avatarAI={avatarAI} />
                     )}
-                    {messages?.map((message: { id: string, role: string, parts?: Array<{ type: string, text?: string }> }) => {
-                        const extractedText = message.parts?.map((part: { type: string, text?: string }) => (part.type === 'text' ? part.text : '') || '').join('') || ''
+                    {messages?.map((message: { id: string, role: string, content?: string, parts?: Array<{ type: string, text?: string }> }) => {
+                        const extractedText = message.content || (message.parts?.map((part: { type: string, text?: string }) => (part.type === 'text' ? part.text : '') || '').join('')) || ''
                         return (
                             <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} />
                         )
