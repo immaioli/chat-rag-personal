@@ -91,22 +91,18 @@ export async function POST(requestPayload: Request) {
 
         try {
             // Check if visitor exists to avoid Prisma P2003 Foreign Key error
-            const existingVisitor = await prisma.visitor.findUnique({
-                where: { id: visitorId }
+            const visitorUpsertPromise = prisma.visitor.upsert({
+                where: { id: visitorId },
+                update: {},
+                create: {
+                    id: visitorId,
+                    name: visitorName || 'Visitante',
+                    company: ''
+                }
             })
 
-            if (!existingVisitor) {
-                await prisma.visitor.create({
-                    data: {
-                        id: visitorId,
-                        name: visitorName || 'Visitante',
-                        company: ''
-                    }
-                })
-            }
-
             // Persist User Message
-            await prisma.chatMessage.create({
+            const userMessageCreationPromise = prisma.chatMessage.create({
                 data: {
                     role: 'user',
                     content: lastUserMessage,
@@ -115,51 +111,37 @@ export async function POST(requestPayload: Request) {
             })
 
             // Persist AI Response
-            await prisma.chatMessage.create({
+            const assistantMessageCreationPromise = prisma.chatMessage.create({
                 data: {
                     role: 'assistant',
                     content: finalNlgResponse,
                     visitorId: visitorId
                 }
             })
+
+            await prisma.$transaction([
+                visitorUpsertPromise,
+                userMessageCreationPromise,
+                assistantMessageCreationPromise
+            ])
         } catch (dbError) {
             console.error('Failed to persist messages to DB:', dbError)
             Sentry.captureException(dbError)
         }
 
-        const stream = new ReadableStream({
-            async start(controller) {
-                const encoder = new TextEncoder()
-                const words = finalNlgResponse.split(' ')
-                const messageId = 'msg_' + Date.now()
-                const partId = 'part_' + Date.now()
+        // We return a simple JSON payload instead of a slow manual stream
+        // The front-end will handle the typing animation visually.
+        const jsonResponsePayload = {
+            id: 'msg_' + Date.now(),
+            role: 'assistant',
+            content: finalNlgResponse,
+            createdAt: new Date().toISOString()
+        }
 
-                controller.enqueue(encoder.encode(`data: {"type":"start","messageId":"${messageId}"}\n\n`))
-                controller.enqueue(encoder.encode(`data: {"type":"text-start","id":"${partId}"}\n\n`))
-
-                for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
-                    const chunk = (wordIndex === 0 ? '' : ' ') + words[wordIndex]
-                    controller.enqueue(encoder.encode(`data: {"type":"text-delta","id":"${partId}","delta":${JSON.stringify(chunk)}}\n\n`))
-
-                    // 30ms delay between words to simulate AI text generation
-                    await new Promise(resolve => setTimeout(resolve, 30))
-                }
-
-                controller.enqueue(encoder.encode(`data: {"type":"text-end","id":"${partId}"}\n\n`))
-                controller.enqueue(encoder.encode(`data: {"type":"finish"}\n\n`))
-                controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
-
-                controller.close()
-            }
-        })
-
-        return new Response(stream, {
+        return new Response(JSON.stringify(jsonResponsePayload), {
             status: 200,
             headers: {
-                'Content-Type': 'text/event-stream; charset=utf-8',
-                'Cache-Control': 'no-cache, no-transform',
-                'X-Content-Type-Options': 'nosniff',
-                'x-vercel-ai-ui-message-stream': 'v1'
+                'Content-Type': 'application/json; charset=utf-8'
             }
         })
 

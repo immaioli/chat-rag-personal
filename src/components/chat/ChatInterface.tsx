@@ -8,8 +8,10 @@ import { QuickActionsMenu } from '@/components/chat/QuickActionsMenu'
 // import { ChatInputForm } from '@/components/chat/ChatInputForm'
 import { TrainingDisclaimer } from './TrainingDisclaimer'
 import { useTranslations } from 'next-intl'
+import { useVisitorStore } from '@/store/visitorStore'
 import { FlexContainer } from '@/components/ui/FlexContainer'
 import { Typography } from '@/components/ui/Typography'
+import { Button } from '@/components/ui/Button'
 import { mergeClasses } from '@/lib/utils'
 import { surfaceStyles, typographyStyles } from '@/constants/styles'
 
@@ -21,7 +23,16 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     const [isProcessingAiResponse, setIsProcessingAiResponse] = useState(false)
     // const [inputValue, setInputValue] = useState('')
     const chatTranslations = useTranslations('ChatInterface')
+    const { visitorIdentifier, visitorFullName, hasValidVisitorName, setVisitorInformation } = useVisitorStore()
+
     const getActiveVisitorData = () => {
+        if (visitorIdentifier && visitorFullName) {
+            return {
+                id: visitorIdentifier,
+                name: visitorFullName
+            }
+        }
+
         if (typeof window !== 'undefined') {
             return {
                 id: localStorage.getItem('mAIo_visitorId') || visitorId || '',
@@ -31,31 +42,21 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         return { id: visitorId || '', name: 'Visitante' }
     }
 
-    const [hasValidName, setHasValidName] = useState(false)
-    const [visitorFirstName, setVisitorFirstName] = useState('')
-
     useEffect(() => {
-        const checkAndSetName = () => {
+        const checkAndSetVisitorState = () => {
             if (typeof window !== 'undefined') {
+                const storedIdentifier = localStorage.getItem('mAIo_visitorId')
                 const storedName = localStorage.getItem('mAIo_visitorName')
-                if (storedName) {
-                    setVisitorFirstName(storedName.split(' ')[0].toUpperCase())
-                    setHasValidName(true)
+                if (storedIdentifier && storedName) {
+                    setVisitorInformation(storedIdentifier, storedName.split(' ')[0].toUpperCase())
                     return true
                 }
             }
             return false
         }
 
-        if (!checkAndSetName()) {
-            const interval = setInterval(() => {
-                if (checkAndSetName()) {
-                    clearInterval(interval)
-                }
-            }, 500)
-            return () => clearInterval(interval)
-        }
-    }, [])
+        checkAndSetVisitorState()
+    }, [setVisitorInformation])
     
     const [currentDate] = useState(() => {
         const now = new Date()
@@ -109,16 +110,21 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         return () => clearTimeout(timer)
     }, [])
 
-    useEffect(() => {
-        // 10 minutes (10 * 60 * 1000 ms)
-        const timeoutId = setTimeout(() => {
-            localStorage.clear()
-            sessionStorage.clear()
-            window.location.reload()
-        }, 600000)
+    const [isSessionCurrentlyExpired, setIsSessionCurrentlyExpired] = useState(false)
 
-        return () => clearTimeout(timeoutId)
+    useEffect(() => {
+        const sessionExpirationTimeoutIdentifier = setTimeout(() => {
+            setIsSessionCurrentlyExpired(true)
+        }, 600000) // 10 minutes
+
+        return () => clearTimeout(sessionExpirationTimeoutIdentifier)
     }, [messages])
+
+    const handleRestartSession = () => {
+        localStorage.clear()
+        sessionStorage.clear()
+        window.location.reload()
+    }
 
     // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
     const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string, visitorName?: string } }) => {
@@ -164,6 +170,21 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     return (
         <FlexContainer justifyContent='center' className={mergeClasses('overflow-hidden h-screen w-full', surfaceStyles.mainWrapper)}>
+            {isSessionCurrentlyExpired && (
+                <FlexContainer alignItems='center' justifyContent='center' className={surfaceStyles.modalOverlay}>
+                    <FlexContainer direction='col' className={surfaceStyles.modalContent + ' p-8 text-center gap-6'}>
+                        <Typography as='h2' size='2xl' weight='bold' className={typographyStyles.modalTitle}>
+                            Sessão Expirada
+                        </Typography>
+                        <Typography as='p' size='md' color='muted'>
+                            Sua sessão expirou por inatividade. Deseja iniciar uma nova conversa?
+                        </Typography>
+                        <Button onClick={handleRestartSession} variant='primaryForm' className='w-full'>
+                            Reiniciar Conversa
+                        </Button>
+                    </FlexContainer>
+                </FlexContainer>
+            )}
             <FlexContainer direction='col' className={mergeClasses('relative', surfaceStyles.chatContainer)}>
                 <ChatHeader avatarUrl={avatar} />
                 <FlexContainer direction='col' className={mergeClasses('space-y-6', surfaceStyles.chatBody)}>
@@ -172,8 +193,8 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                             Hoje
                         </Typography>
                     </FlexContainer>
-                    {hasValidName ? (
-                        <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFirstName })} currentDate={currentDate} avatarAI={avatarAI} />
+                    {hasValidVisitorName ? (
+                        <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFullName })} currentDate={currentDate} avatarAI={avatarAI} />
                     ) : (
                         <TypingIndicator avatarAI={avatarAI} />
                     )}

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { MarkdownBlock } from './MarkdownBlock'
+import { AnimatedTypingMessage } from './AnimatedTypingMessage'
 import { MessageAvatar } from './MessageAvatar'
 import { MessageInfo } from './MessageInfo'
 import { FlexContainer } from '@/components/ui/FlexContainer'
@@ -52,11 +53,11 @@ export function MessageBubble({
                             isUser ? (
                                 <span key={index}>{messagePart.text}</span>
                             ) : (
-                                <MarkdownBlock key={index} content={messagePart.text} />
+                                <AnimatedTypingMessage key={index} fullContentText={messagePart.text} />
                             )
                         ))
                     ) : (
-                        isUser ? <span>{content}</span> : <MarkdownBlock content={content} />
+                        isUser ? <span>{content}</span> : <AnimatedTypingMessage fullContentText={content} />
                     )}
                 </div>
             </div>

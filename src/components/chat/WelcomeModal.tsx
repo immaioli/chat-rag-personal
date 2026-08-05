@@ -20,6 +20,7 @@ import {
 import ptBR from '../../../translate/pt-BR.json'
 import enUS from '../../../translate/en-US.json'
 import esLA from '../../../translate/es-LA.json'
+import { useVisitorStore } from '@/store/visitorStore'
 
 const modalDict = {
     'pt-BR': ptBR.WelcomeModal,
@@ -35,6 +36,7 @@ export function WelcomeModal() {
     const [company, setCompany] = useState('')
     const [selectedLocale, setSelectedLocale] = useState('en-US')
     const [isLoading, setIsLoading] = useState(false)
+    const { setVisitorInformation } = useVisitorStore()
 
     useEffect(() => {
         const storedVisitorId = localStorage.getItem('mAIo_visitorId')
@@ -51,6 +53,7 @@ export function WelcomeModal() {
         if (response.success && response.visitorId) {
             localStorage.setItem('mAIo_visitorId', response.visitorId)
             localStorage.setItem('mAIo_visitorName', name)
+            setVisitorInformation(response.visitorId, name)
             setIsOpen(false)
             router.replace(
                 pathname,
