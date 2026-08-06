@@ -115,12 +115,14 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     const [isSessionCurrentlyExpired, setIsSessionCurrentlyExpired] = useState(false)
 
     useEffect(() => {
+        if (!hasValidVisitorName) return // Prevent starting the idle timer if the user hasn't completed the WelcomeModal
+
         const sessionExpirationTimeoutIdentifier = setTimeout(() => {
             setIsSessionCurrentlyExpired(true)
         }, 600000) // 10 minutes
 
         return () => clearTimeout(sessionExpirationTimeoutIdentifier)
-    }, [messages])
+    }, [messages, hasValidVisitorName])
 
     // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
     const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string, visitorName?: string } }) => {

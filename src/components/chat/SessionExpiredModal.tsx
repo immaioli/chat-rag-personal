@@ -80,7 +80,7 @@ export function SessionExpiredModal({ isSessionCurrentlyExpired, hasValidVisitor
                         </FlexContainer>
                     </FlexContainer>
 
-                    <Button onClick={handleRestartSession} variant='primaryForm' className={buttonStyles.primaryForm}>
+                    <Button onClick={handleRestartSession} variant='primaryForm'>
                         {activeExpiredTexts.button}
                     </Button>
                 </FlexContainer>
