@@ -6,15 +6,16 @@ import { LanguageButton } from './LanguageButton'
 import { FlexContainer } from '@/components/ui/FlexContainer'
 import { Typography } from '@/components/ui/Typography'
 import { Button } from '@/components/ui/Button'
+import { mergeClasses } from '@/lib/utils'
 import { surfaceStyles, typographyStyles, buttonStyles, layoutStyles } from '@/constants/styles'
 import ptBR from '../../../translate/pt-BR.json'
 import enUS from '../../../translate/en-US.json'
 import esLA from '../../../translate/es-LA.json'
 
 const modalDict = {
-    'pt-BR': ptBR.SessionExpiredModal,
-    'en-US': enUS.SessionExpiredModal,
-    'es-LA': esLA.SessionExpiredModal
+    'pt-BR': { expired: ptBR.SessionExpiredModal, welcome: ptBR.WelcomeModal },
+    'en-US': { expired: enUS.SessionExpiredModal, welcome: enUS.WelcomeModal },
+    'es-LA': { expired: esLA.SessionExpiredModal, welcome: esLA.WelcomeModal }
 }
 
 interface SessionExpiredModalProperties {
@@ -49,10 +50,10 @@ export function SessionExpiredModal({ isSessionCurrentlyExpired, hasValidVisitor
             <FlexContainer direction='col' className={surfaceStyles.modalContent}>
                 <FlexContainer direction='col' className={surfaceStyles.modalHeader}>
                     <Typography as='h2' size='2xl' weight='bold' className={typographyStyles.modalTitle}>
-                        {activeExpiredTexts.title}
+                        {activeExpiredTexts.expired.title}
                     </Typography>
                     <Typography as='p' size='sm' color='muted' className='mt-2'>
-                        {activeExpiredTexts.description}
+                        {activeExpiredTexts.welcome.description}
                     </Typography>
                 </FlexContainer>
 
@@ -80,8 +81,12 @@ export function SessionExpiredModal({ isSessionCurrentlyExpired, hasValidVisitor
                         </FlexContainer>
                     </FlexContainer>
 
-                    <Button onClick={handleRestartSession} variant='primaryForm'>
-                        {activeExpiredTexts.button}
+                    <Typography as='p' size='sm' color='muted' className='text-center my-2'>
+                        {activeExpiredTexts.expired.description}
+                    </Typography>
+
+                    <Button onClick={handleRestartSession} className={buttonStyles.primaryForm}>
+                        {activeExpiredTexts.expired.button}
                     </Button>
                 </FlexContainer>
             </FlexContainer>
