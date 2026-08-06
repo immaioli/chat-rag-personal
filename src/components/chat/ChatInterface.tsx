@@ -13,7 +13,29 @@ import { FlexContainer } from '@/components/ui/FlexContainer'
 import { Typography } from '@/components/ui/Typography'
 import { Button } from '@/components/ui/Button'
 import { mergeClasses } from '@/lib/utils'
-import { surfaceStyles, typographyStyles, buttonStyles } from '@/constants/styles'
+import { surfaceStyles, typographyStyles, buttonStyles, layoutStyles } from '@/constants/styles'
+
+import { BR, US, ES } from 'country-flag-icons/react/3x2'
+import { LanguageButton } from './LanguageButton'
+import { useRouter, usePathname } from '@/i18n/routing'
+
+const sessionExpiredDict = {
+    'pt-BR': {
+        title: 'Sessão Expirada',
+        description: 'Sua sessão expirou por inatividade. Deseja iniciar uma nova conversa?',
+        button: 'Reiniciar Conversa'
+    },
+    'en-US': {
+        title: 'Session Expired',
+        description: 'Your session has expired due to inactivity. Would you like to start a new conversation?',
+        button: 'Restart Conversation'
+    },
+    'es-LA': {
+        title: 'Sesión Expirada',
+        description: 'Su sesión ha expirado por inactividad. ¿Desea iniciar una nueva conversación?',
+        button: 'Reiniciar Conversación'
+    }
+}
 
 const avatar = '/avatar.jpg'
 const avatarAI = '/avatar_mAIo.png'
@@ -75,6 +97,11 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
     // FIX: Extracting all required variables directly and bypassing TypeScript strict options
     const { messages, setMessages, sendMessage, status } = useChat()
 
+    const router = useRouter()
+    const pathname = usePathname()
+    const [selectedLocale, setSelectedLocale] = useState('en-US')
+    const activeExpiredTexts = sessionExpiredDict[selectedLocale as keyof typeof sessionExpiredDict] || sessionExpiredDict['en-US']
+
     useEffect(() => {
         if (messages && messages.length > 0) {
             sessionStorage.setItem('mAIo_chat_history', JSON.stringify(messages))
@@ -120,10 +147,17 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
         return () => clearTimeout(sessionExpirationTimeoutIdentifier)
     }, [messages])
 
+    useEffect(() => {
+        // Set default locale based on path if available, to match WelcomeModal behavior
+        if (pathname.includes('/pt-BR')) setSelectedLocale('pt-BR')
+        else if (pathname.includes('/es-LA')) setSelectedLocale('es-LA')
+    }, [pathname])
+
     const handleRestartSession = () => {
         localStorage.clear()
         sessionStorage.clear()
-        window.location.reload()
+        router.replace(pathname, { locale: selectedLocale })
+        setTimeout(() => window.location.reload(), 100) // Ensure complete wipe and fresh state
     }
 
     // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
@@ -196,20 +230,46 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     return (
         <FlexContainer justifyContent='center' className={mergeClasses('overflow-hidden h-screen w-full', surfaceStyles.mainWrapper)}>
-            {isSessionCurrentlyExpired && (
+            {isSessionCurrentlyExpired && hasValidVisitorName && (
                 <FlexContainer alignItems='center' justifyContent='center' className={surfaceStyles.modalOverlay}>
-                    <FlexContainer direction='col' className={surfaceStyles.modalContent + ' p-8 text-center gap-6'}>
-                        <Typography as='h2' size='2xl' weight='bold' className={typographyStyles.modalTitle}>
-                            Sessão Expirada
-                        </Typography>
-                        <Typography as='p' size='md' color='muted'>
-                            Sua sessão expirou por inatividade. Deseja iniciar uma nova conversa?
-                        </Typography>
-                        <Button onClick={handleRestartSession} className={buttonStyles.quickAction}>
-                            <Typography as='span' size='sm' weight='medium' className={typographyStyles.quickAction}>
-                                Reiniciar Conversa
+                    <FlexContainer direction='col' className={surfaceStyles.modalContent}>
+                        <FlexContainer direction='col' className={surfaceStyles.modalHeader}>
+                            <Typography as='h2' size='2xl' weight='bold' className={typographyStyles.modalTitle}>
+                                {activeExpiredTexts.title}
                             </Typography>
-                        </Button>
+                            <Typography as='p' size='sm' color='muted' className='mt-2'>
+                                {activeExpiredTexts.description}
+                            </Typography>
+                        </FlexContainer>
+
+                        <FlexContainer direction='col' className={surfaceStyles.modalForm}>
+                            <FlexContainer direction='col' className={layoutStyles.languageSection}>
+                                <FlexContainer justifyContent='between' className='gap-4 w-full'>
+                                    <LanguageButton
+                                        title='Português'
+                                        icon={BR}
+                                        onClick={() => setSelectedLocale('pt-BR')}
+                                        isActive={selectedLocale === 'pt-BR'}
+                                    />
+                                    <LanguageButton
+                                        title='English'
+                                        icon={US}
+                                        onClick={() => setSelectedLocale('en-US')}
+                                        isActive={selectedLocale === 'en-US'}
+                                    />
+                                    <LanguageButton
+                                        title='Español'
+                                        icon={ES}
+                                        onClick={() => setSelectedLocale('es-LA')}
+                                        isActive={selectedLocale === 'es-LA'}
+                                    />
+                                </FlexContainer>
+                            </FlexContainer>
+
+                            <Button onClick={handleRestartSession} variant='primaryForm' className={buttonStyles.primaryForm}>
+                                {activeExpiredTexts.button}
+                            </Button>
+                        </FlexContainer>
                     </FlexContainer>
                 </FlexContainer>
             )}

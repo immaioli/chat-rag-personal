@@ -28,5 +28,10 @@
     },
     "TechStack": {
         "tooltip": "Estoy en constante aprendizaje de nuevas stacks"
+    },
+    "SessionExpiredModal": {
+        "title": "Sesión Expirada",
+        "description": "Su sesión ha expirado por inactividad. ¿Desea iniciar una nueva conversación?",
+        "button": "Reiniciar Conversación"
     }
 }
