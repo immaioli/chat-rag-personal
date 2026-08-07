@@ -1,7 +1,7 @@
-'use client'
+﻿'use client'
 import { useEffect, useState } from 'react'
 import { MarkdownBlock } from './MarkdownBlock'
-import { AnimatedTypingMessage } from './AnimatedTypingMessage'
+import { TypingIndicator } from './TypingIndicator'
 import { MessageAvatar } from './MessageAvatar'
 import { MessageInfo } from './MessageInfo'
 import { FlexContainer } from '@/components/ui/FlexContainer'
@@ -24,6 +24,7 @@ export function MessageBubble({
     avatarAI
 }: MessageBubbleProps) {
     const [visitorName, setVisitorName] = useState<string>('Você')
+    const [showMessage, setShowMessage] = useState(isUser)
 
     useEffect(() => {
         const storedName = localStorage.getItem('mAIo_visitorName')
@@ -31,7 +32,14 @@ export function MessageBubble({
             const firstName = storedName.split(' ')[0]
             setVisitorName(firstName)
         }
-    }, [])
+
+        if (!isUser) {
+            const timer = setTimeout(() => {
+                setShowMessage(true)
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [isUser])
 
     return (
         <div className={isUser ? layoutStyles.messageWrapperUser : layoutStyles.messageWrapperAI}>
@@ -53,14 +61,15 @@ export function MessageBubble({
                             isUser ? (
                                 <span key={index}>{messagePart.text}</span>
                             ) : (
-                                <AnimatedTypingMessage key={index} fullContentText={messagePart.text} />
+                                (showMessage ? <MarkdownBlock content={messagePart.text} /> : <TypingIndicator avatarAI={avatarAI} />)
                             )
                         ))
                     ) : (
-                        isUser ? <span>{content}</span> : <AnimatedTypingMessage fullContentText={content} />
+                        isUser ? <span>{content}</span> : (showMessage ? <MarkdownBlock content={content} /> : <div className='pt-1 pb-1'><TypingIndicator avatarAI={avatarAI} /></div>)
                     )}
                 </div>
             </div>
         </div>
     )
 }
+

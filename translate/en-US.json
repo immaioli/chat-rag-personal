@@ -11,7 +11,7 @@
   },
   "ChatInterface": {
     "today": "Today",
-    "welcomeMessage": "Hello, **{name}**! I'm mAIo, the Artificial Intelligence of Irineu Marcelo MAIOLI's portfolio. I was trained to briefly tell you about his professional journey, projects, skills, and other relevant information.\n\nSince I was just launched and am in my version 1.0.0, our interaction right now will happen through the quick topics.\n\nBut my development doesn't stop here! For my next updates, the idea is to include:  \n• A text field for you to write your messages;  \n• Audio recording support, allowing voice conversations;  \n• Full integration with LLMs for a more fluid and less robotic conversation;  \n• And other news... like, maybe, becoming an animated assistant. Who knows?\n\nTo get started, choose one of the quick topics below!",
+    "welcomeMessage": "Hello, **{name}**! I am the mAIo Assistant, an AI trained with the complete history, code, and knowledge of Irineu Marcelo Maioli.\n\nI was designed to answer like him and present to you our over 10 years of experience in Full-Stack software engineering and AI development.\n\nTo make our interaction faster and more objective, I have organized the main themes of my profile into quick topics.\n\nWhat would you like to know first?",
     "inputPlaceholder": "Or type your message here...",
     "disclaimer": "mAIo is an AI in continuous evolution and may make mistakes."
   },
