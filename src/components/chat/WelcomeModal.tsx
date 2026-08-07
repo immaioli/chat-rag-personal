@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect, FormEvent } from 'react'
 import { useRouter, usePathname } from '@/i18n/routing'
 import { registerVisitor } from '@/actions/visitor'
@@ -23,9 +23,9 @@ import esLA from '../../../translate/es-LA.json'
 import { useVisitorStore } from '@/store/visitorStore'
 
 const modalDict = {
-    'pt-BR': ptBR.WelcomeModal,
-    'en-US': enUS.WelcomeModal,
-    'es-LA': esLA.WelcomeModal
+    'pt-BR': { welcome: ptBR.WelcomeModal, screen: ptBR.ScreenModal },
+    'en-US': { welcome: enUS.WelcomeModal, screen: enUS.ScreenModal },
+    'es-LA': { welcome: esLA.WelcomeModal, screen: esLA.ScreenModal }
 }
 
 export function WelcomeModal() {
@@ -86,7 +86,7 @@ export function WelcomeModal() {
                         weight='bold'
                         className={typographyStyles.modalTitle}
                     >
-                        {activeTexts.title}
+                        {activeTexts.welcome.title}
                     </Typography>
                     <Typography
                         as='p'
@@ -94,7 +94,7 @@ export function WelcomeModal() {
                         color='muted'
                         className='mt-2'
                     >
-                        {activeTexts.description}
+                        {activeTexts.screen.languageDescription}
                     </Typography>
                 </FlexContainer>
                 <FlexContainer
@@ -136,13 +136,13 @@ export function WelcomeModal() {
                         className={layoutStyles.formSection}
                     >
                         <Input
-                            placeholder={activeTexts.name_ph}
+                            placeholder={activeTexts.welcome.namePlaceholder}
                             required
                             value={name}
                             onChange={(event) => setName(event.target.value)}
                         />
                         <Input
-                            placeholder={activeTexts.company_ph}
+                            placeholder={activeTexts.welcome.companyPlaceholder}
                             value={company}
                             onChange={(event) => setCompany(event.target.value)}
                         />
@@ -164,7 +164,7 @@ export function WelcomeModal() {
                             weight='normal'
                             className={typographyStyles.infoBannerText}
                         >
-                            {activeTexts.disclaimer}
+                            {activeTexts.welcome.disclaimer}
                         </Typography>
                     </FlexContainer>
                     <Button

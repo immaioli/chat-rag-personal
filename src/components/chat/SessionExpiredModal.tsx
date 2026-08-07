@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from '@/i18n/routing'
 import { BR, US, ES } from 'country-flag-icons/react/3x2'
@@ -13,9 +13,9 @@ import enUS from '../../../translate/en-US.json'
 import esLA from '../../../translate/es-LA.json'
 
 const modalDict = {
-    'pt-BR': { expired: ptBR.SessionExpiredModal, welcome: ptBR.WelcomeModal },
-    'en-US': { expired: enUS.SessionExpiredModal, welcome: enUS.WelcomeModal },
-    'es-LA': { expired: esLA.SessionExpiredModal, welcome: esLA.WelcomeModal }
+    'pt-BR': { expired: ptBR.SessionExpiredModal, screen: ptBR.ScreenModal },
+    'en-US': { expired: enUS.SessionExpiredModal, screen: enUS.ScreenModal },
+    'es-LA': { expired: esLA.SessionExpiredModal, screen: esLA.ScreenModal }
 }
 
 interface SessionExpiredModalProperties {
@@ -53,7 +53,7 @@ export function SessionExpiredModal({ isSessionCurrentlyExpired, hasValidVisitor
                         {activeExpiredTexts.expired.title}
                     </Typography>
                     <Typography as='p' size='sm' color='muted' className='mt-2'>
-                        {activeExpiredTexts.welcome.description}
+                        {activeExpiredTexts.screen.languageDescription}
                     </Typography>
                 </FlexContainer>
 

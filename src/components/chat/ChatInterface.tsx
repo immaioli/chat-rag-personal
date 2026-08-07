@@ -114,15 +114,40 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
 
     const [isSessionCurrentlyExpired, setIsSessionCurrentlyExpired] = useState(false)
 
+    const timeoutIdentifierReference = useRef<NodeJS.Timeout>(undefined)
+
+    const resetSessionIdleTimer = () => {
+        if (timeoutIdentifierReference.current) {
+            clearTimeout(timeoutIdentifierReference.current)
+        }
+        timeoutIdentifierReference.current = setTimeout(() => {
+            setIsSessionCurrentlyExpired(true)
+        }, 600000) // 10 minutes
+    }
+
     useEffect(() => {
         if (!hasValidVisitorName) return // Prevent starting the idle timer if the user hasn't completed the WelcomeModal
 
-        const sessionExpirationTimeoutIdentifier = setTimeout(() => {
-            setIsSessionCurrentlyExpired(true)
-        }, 600000) // 10 minutes
+        // Start initial timer
+        resetSessionIdleTimer()
 
-        return () => clearTimeout(sessionExpirationTimeoutIdentifier)
-    }, [messages, hasValidVisitorName])
+        // Setup event listeners for user activity
+        const activityEventsList = ['mousedown', 'keydown', 'scroll', 'touchstart']
+        const handleUserActivity = () => resetSessionIdleTimer()
+
+        activityEventsList.forEach(eventName => {
+            window.addEventListener(eventName, handleUserActivity)
+        })
+
+        return () => {
+            if (timeoutIdentifierReference.current) {
+                clearTimeout(timeoutIdentifierReference.current)
+            }
+            activityEventsList.forEach(eventName => {
+                window.removeEventListener(eventName, handleUserActivity)
+            })
+        }
+    }, [hasValidVisitorName])
 
     // PREVENT MULTIPLE SUBMISSIONS IN REACT COMPONENT
     const handleSendMessage = async (payload: { text: string }, options: { body: { visitorId: string, visitorName?: string } }) => {

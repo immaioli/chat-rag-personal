@@ -1,37 +1,40 @@
 {
-    "WelcomeModal": {
-        "title": "Bem-vindo(a)",
-        "description": "Por favor, escolha o seu idioma e identifique-se.",
-        "langLabel": "Idioma",
-        "name_ph": "Seu Nome (Obrigatório)",
-        "company_ph": "Empresa (Opcional)",
-        "disclaimer": "Ao entrar, você concorda que as mensagens enviadas nesta plataforma serão armazenadas exclusivamente para fins de auditoria, análise e aprimoramento contínuo deste modelo de Inteligência Artificial.",
-        "button_load": "Iniciando Cérebro...",
-        "button_default": "Entrar na Conversa"
-    },
-    "ChatInterface": {
-        "today": "Hoje",
-        "welcomeMessage": "Olá, **{name}**! Eu sou o mAIo Assistant, uma IA treinada com todo o histórico, código e conhecimento do Irineu Marcelo Maioli.\n\nFui projetado para responder como ele e te apresentar os nossos mais de 10 anos de experiência em engenharia de software Full-Stack e desenvolvimento de IA.\n\nPara tornar nossa interação mais ágil e objetiva, organizei os principais temas do meu perfil em tópicos rápidos.\n\nSobre o que você gostaria de saber primeiro?",
-        "inputPlaceholder": "Ou digite sua mensagem aqui...",
-        "disclaimer": "O mAIo é uma IA em contínua evolução e pode cometer equívocos."
-    },
-    "QuickActions": {
-        "title": "Selecione um tópico rápido",
-        "summary": "Resumo",
-        "experience": "Experiência",
-        "education": "Graduação",
-        "skills": "Habilidade",
-        "portfolio": "Portfólio",
-        "language": "Idioma",
-        "resume": "Currículo / Carta de apresentação",
-        "contact": "Contato"
-    },
-    "TechStack": {
-        "tooltip": "Estou em constante aprendizado de outras stacks"
-    },
-    "SessionExpiredModal": {
-        "title": "Sessão Expirada",
-        "description": "Sua sessão expirou por inatividade. Deseja iniciar uma nova conversa?",
-        "button": "Reiniciar Conversa"
-    }
+  "WelcomeModal": {
+    "title": "Bem-vindo(a)",
+    "description": "Por favor, escolha o seu idioma e identifique-se.",
+    "langLabel": "Idioma",
+    "disclaimer": "Ao entrar, você concorda que as mensagens enviadas nesta plataforma serão armazenadas exclusivamente para fins de auditoria, análise e aprimoramento contínuo deste modelo de Inteligência Artificial.",
+    "namePlaceholder": "Seu Nome (Obrigatório)",
+    "companyPlaceholder": "Empresa (Opcional)",
+    "buttonLoad": "Iniciando Cérebro...",
+    "buttonDefault": "Entrar na Conversa"
+  },
+  "ChatInterface": {
+    "today": "Hoje",
+    "welcomeMessage": "Olá, **{name}**! Eu sou o mAIo Assistant, uma IA treinada com todo o histórico, código e conhecimento do Irineu Marcelo Maioli.\n\nFui projetado para responder como ele e te apresentar os nossos mais de 10 anos de experiência em engenharia de software Full-Stack e desenvolvimento de IA.\n\nPara tornar nossa interação mais ágil e objetiva, organizei os principais temas do meu perfil em tópicos rápidos.\n\nSobre o que você gostaria de saber primeiro?",
+    "inputPlaceholder": "Ou digite sua mensagem aqui...",
+    "disclaimer": "O mAIo é uma IA em contínua evolução e pode cometer equívocos."
+  },
+  "QuickActions": {
+    "title": "Selecione um tópico rápido",
+    "summary": "Resumo",
+    "experience": "Experiência",
+    "education": "Graduação",
+    "skills": "Habilidade",
+    "portfolio": "Portfólio",
+    "language": "Idioma",
+    "resume": "Currículo / Carta de apresentação",
+    "contact": "Contato"
+  },
+  "TechStack": {
+    "tooltip": "Estou em constante aprendizado de outras stacks"
+  },
+  "SessionExpiredModal": {
+    "title": "Sessão Expirada",
+    "description": "Sua sessão expirou por inatividade. Deseja iniciar uma nova conversa?",
+    "button": "Reiniciar Conversa"
+  },
+  "ScreenModal": {
+    "languageDescription": "Por favor, escolha o seu idioma."
+  }
 }
