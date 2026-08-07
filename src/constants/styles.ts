@@ -352,7 +352,7 @@ export const surfaceStyles = {
       modalContent: 'w-full max-w-md overflow-hidden ' +
             `rounded-2xl ${BORDER_BASE} ${COLOR_SURFACE} ` +
             'shadow-2xl',
-      modalHeader: 'flex items-center justify-between shrink-0 mt-4 ' +
+      modalHeader: 'flex items-center justify-between shrink-0 mt-4 px-6 pb-4 ' +
             `border-b ${BORDER_DARK}`,
       modalForm: 'flex flex-col gap-4 m-4',
       modalOverlay: `${FLEX_CENTER} fixed inset-0 z-50 px-4 ` +
