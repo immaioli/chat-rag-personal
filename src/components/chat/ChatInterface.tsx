@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from 'react'
 import { ChatHeader } from '@/components/chat/ChatHeader'
 import { MessageBubble } from '@/components/chat/MessageBubble'
 import { TypingIndicator } from '@/components/chat/TypingIndicator'
+import { MessageAvatar } from '@/components/chat/MessageAvatar'
+import { MessageInfo } from '@/components/chat/MessageInfo'
 import { QuickActionsMenu } from '@/components/chat/QuickActionsMenu'
 // import { ChatInputForm } from '@/components/chat/ChatInputForm'
 import { TrainingDisclaimer } from './TrainingDisclaimer'
@@ -229,17 +231,24 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                         </Typography>
                     </FlexContainer>
                     {hasValidVisitorName ? (
-                        <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFullName })} currentDate={currentDate} avatarAI={avatarAI} />
+                        <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFullName })} currentDate={currentDate} avatarAI={avatarAI} isTyping={false} />
                     ) : (
-                        <TypingIndicator />
+                        <div className="flex items-start gap-3 w-full">
+                            <MessageAvatar isUser={false} avatarAI={avatarAI} />
+                            <div className={layoutStyles.messageContainer}>
+                                <MessageInfo isUser={false} currentDate={currentDate} />
+                                <div className={surfaceStyles.messageBubbleAI}>
+                                    <TypingIndicator />
+                                </div>
+                            </div>
+                        </div>
                     )}
                     {messages?.map((message: { id: string, role: string, content?: string, parts?: Array<{ type: string, text?: string }> }) => {
                         const extractedText = message.content || (message.parts?.map((part: { type: string, text?: string }) => (part.type === 'text' ? part.text : '') || '').join('')) || ''
                         return (
-                            <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} />
+                            <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} isTyping={true} />
                         )
                     })}
-                    {isAITyping && <TypingIndicator />}
                     <div ref={messagesEndRef} className='h-px w-full' />
                 </FlexContainer>
                 <FlexContainer direction='col' className={mergeClasses('gap-3', surfaceStyles.chatFooter)}>

@@ -14,6 +14,7 @@ interface MessageBubbleProps {
     parts?: any[]
     currentDate: string
     avatarAI: string
+    isTyping?: boolean
 }
 
 export function MessageBubble({
@@ -21,19 +22,20 @@ export function MessageBubble({
     content,
     parts,
     currentDate,
-    avatarAI
+    avatarAI,
+    isTyping = false
 }: MessageBubbleProps) {
     const [visitorName, setVisitorName] = useState<string>('Você')
-    const [showMessage, setShowMessage] = useState(isUser)
+    const [showMessage, setShowMessage] = useState(isUser || !isTyping)
 
     useEffect(() => {
-        if (!isUser) {
+        if (!isUser && isTyping) {
             const timer = setTimeout(() => {
                 setShowMessage(true)
             }, 3000)
             return () => clearTimeout(timer)
         }
-    }, [isUser])
+    }, [isUser, isTyping])
 
     useEffect(() => {
         const storedName = localStorage.getItem('mAIo_visitorName')
