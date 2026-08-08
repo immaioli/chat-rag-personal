@@ -65,7 +65,7 @@ export function MessageBubble({
                             ) : (
                                 (!showMessage ? (
                                     <div className="pt-1 pb-1 min-w-[40px] flex justify-center animate-in fade-in duration-300">
-                                        <TypingIndicator avatarAI={avatarAI} />
+                                        <TypingIndicator />
                                     </div>
                                 ) : (
                                     <div className="animate-in fade-in zoom-in-95 duration-500">
@@ -77,7 +77,7 @@ export function MessageBubble({
                     ) : (
                         isUser ? <span>{content}</span> : (!showMessage ? (
                             <div className="pt-1 pb-1 min-w-[40px] flex justify-center animate-in fade-in duration-300">
-                                <TypingIndicator avatarAI={avatarAI} />
+                                <TypingIndicator />
                             </div>
                         ) : (
                             <div className="animate-in fade-in zoom-in-95 duration-500">

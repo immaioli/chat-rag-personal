@@ -231,7 +231,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                     {hasValidVisitorName ? (
                         <MessageBubble isUser={false} content={chatTranslations('welcomeMessage', { name: visitorFullName })} currentDate={currentDate} avatarAI={avatarAI} />
                     ) : (
-                        <TypingIndicator avatarAI={avatarAI} />
+                        <TypingIndicator />
                     )}
                     {messages?.map((message: { id: string, role: string, content?: string, parts?: Array<{ type: string, text?: string }> }) => {
                         const extractedText = message.content || (message.parts?.map((part: { type: string, text?: string }) => (part.type === 'text' ? part.text : '') || '').join('')) || ''
@@ -239,7 +239,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                             <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} />
                         )
                     })}
-                    {isAITyping && <TypingIndicator avatarAI={avatarAI} />}
+                    {isAITyping && <TypingIndicator />}
                     <div ref={messagesEndRef} className='h-px w-full' />
                 </FlexContainer>
                 <FlexContainer direction='col' className={mergeClasses('gap-3', surfaceStyles.chatFooter)}>
