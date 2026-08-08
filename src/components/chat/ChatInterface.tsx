@@ -250,8 +250,9 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                         )
                     })}
                     
+                    <div ref={messagesEndRef} className="h-4 w-full shrink-0" />
                 </FlexContainer>
-                <FlexContainer direction='col' className={mergeClasses('gap-3', surfaceStyles.chatFooter)}>
+                <FlexContainer direction="col" className={mergeClasses("gap-3", surfaceStyles.chatFooter)}>
                     <QuickActionsMenu onAction={handleQuickAction} />
                     {/* VERSION 2.0.0: AI manual input integration form
                     <ChatInputForm
@@ -263,7 +264,6 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                     */}
                     <TrainingDisclaimer />
                 </FlexContainer>
-                <div ref={messagesEndRef} className='h-24 w-full shrink-0' />
             </FlexContainer>
         </FlexContainer>
     )

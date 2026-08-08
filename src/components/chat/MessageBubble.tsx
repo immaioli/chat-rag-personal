@@ -33,6 +33,11 @@ export function MessageBubble({
         if (!isUser && isTyping) {
             const timer = setTimeout(() => {
                 setShowMessage(true)
+                if (onReveal) {
+                    setTimeout(() => {
+                        onReveal()
+                    }, 150)
+                }
             }, 3000)
             return () => clearTimeout(timer)
         }
