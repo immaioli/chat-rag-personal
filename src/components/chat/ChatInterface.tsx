@@ -249,7 +249,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                             <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} isTyping={true} onReveal={scrollBottom} />
                         )
                     })}
-                    <div ref={messagesEndRef} className='h-px w-full' />
+                    
                 </FlexContainer>
                 <FlexContainer direction='col' className={mergeClasses('gap-3', surfaceStyles.chatFooter)}>
                     <QuickActionsMenu onAction={handleQuickAction} />
@@ -263,6 +263,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                     */}
                     <TrainingDisclaimer />
                 </FlexContainer>
+                <div ref={messagesEndRef} className='h-24 w-full shrink-0' />
             </FlexContainer>
         </FlexContainer>
     )
