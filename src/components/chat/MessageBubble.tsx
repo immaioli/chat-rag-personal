@@ -24,7 +24,8 @@ export function MessageBubble({
     parts,
     currentDate,
     avatarAI,
-    isTyping = false
+    isTyping = false,
+    onReveal
 }: MessageBubbleProps) {
     const [visitorName, setVisitorName] = useState<string>('Você')
     const [showMessage, setShowMessage] = useState(isUser || !isTyping)
