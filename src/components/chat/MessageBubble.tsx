@@ -27,12 +27,6 @@ export function MessageBubble({
     const [showMessage, setShowMessage] = useState(isUser)
 
     useEffect(() => {
-        const storedName = localStorage.getItem('mAIo_visitorName')
-        if (storedName) {
-            const firstName = storedName.split(' ')[0]
-            setVisitorName(firstName)
-        }
-
         if (!isUser) {
             const timer = setTimeout(() => {
                 setShowMessage(true)
@@ -40,6 +34,14 @@ export function MessageBubble({
             return () => clearTimeout(timer)
         }
     }, [isUser])
+
+    useEffect(() => {
+        const storedName = localStorage.getItem('mAIo_visitorName')
+        if (storedName) {
+            const firstName = storedName.split(' ')[0]
+            setVisitorName(firstName)
+        }
+    }, [])
 
     return (
         <div className={isUser ? layoutStyles.messageWrapperUser : layoutStyles.messageWrapperAI}>
@@ -61,11 +63,27 @@ export function MessageBubble({
                             isUser ? (
                                 <span key={index}>{messagePart.text}</span>
                             ) : (
-                                (showMessage ? <MarkdownBlock content={messagePart.text} /> : <TypingIndicator avatarAI={avatarAI} />)
+                                (!showMessage ? (
+                                    <div className="pt-1 pb-1 min-w-[40px] flex justify-center animate-in fade-in duration-300">
+                                        <TypingIndicator avatarAI={avatarAI} />
+                                    </div>
+                                ) : (
+                                    <div className="animate-in fade-in zoom-in-95 duration-500">
+                                        <MarkdownBlock content={messagePart.text} />
+                                    </div>
+                                ))
                             )
                         ))
                     ) : (
-                        isUser ? <span>{content}</span> : (showMessage ? <MarkdownBlock content={content} /> : <div className='pt-1 pb-1'><TypingIndicator avatarAI={avatarAI} /></div>)
+                        isUser ? <span>{content}</span> : (!showMessage ? (
+                            <div className="pt-1 pb-1 min-w-[40px] flex justify-center animate-in fade-in duration-300">
+                                <TypingIndicator avatarAI={avatarAI} />
+                            </div>
+                        ) : (
+                            <div className="animate-in fade-in zoom-in-95 duration-500">
+                                <MarkdownBlock content={content} />
+                            </div>
+                        ))
                     )}
                 </div>
             </div>
