@@ -63,27 +63,11 @@ export function MessageBubble({
                             isUser ? (
                                 <span key={index}>{messagePart.text}</span>
                             ) : (
-                                (!showMessage ? (
-                                    <div className="pt-1 pb-1 min-w-[40px] flex justify-center animate-in fade-in duration-300">
-                                        <TypingIndicator />
-                                    </div>
-                                ) : (
-                                    <div className="animate-in fade-in zoom-in-95 duration-500">
-                                        <MarkdownBlock content={messagePart.text} />
-                                    </div>
-                                ))
+                                ((!showMessage ? <TypingIndicator /> : <div className="animate-in fade-in zoom-in-95 duration-500"><MarkdownBlock content={messagePart.text} /></div>))
                             )
                         ))
                     ) : (
-                        isUser ? <span>{content}</span> : (!showMessage ? (
-                            <div className="pt-1 pb-1 min-w-[40px] flex justify-center animate-in fade-in duration-300">
-                                <TypingIndicator />
-                            </div>
-                        ) : (
-                            <div className="animate-in fade-in zoom-in-95 duration-500">
-                                <MarkdownBlock content={content} />
-                            </div>
-                        ))
+                        isUser ? <span>{content}</span> : ((!showMessage ? <TypingIndicator /> : <div className="animate-in fade-in zoom-in-95 duration-500"><MarkdownBlock content={content} /></div>))
                     )}
                 </div>
             </div>
