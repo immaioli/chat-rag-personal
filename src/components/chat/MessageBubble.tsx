@@ -15,6 +15,7 @@ interface MessageBubbleProps {
     currentDate: string
     avatarAI: string
     isTyping?: boolean
+    onReveal?: () => void
 }
 
 export function MessageBubble({

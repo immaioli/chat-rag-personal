@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useChat } from '@ai-sdk/react'
 import { useEffect, useState, useRef } from 'react'
 import { ChatHeader } from '@/components/chat/ChatHeader'
@@ -246,7 +246,7 @@ export function ChatInterface({ visitorId }: { visitorId: string }) {
                     {messages?.map((message: { id: string, role: string, content?: string, parts?: Array<{ type: string, text?: string }> }) => {
                         const extractedText = message.content || (message.parts?.map((part: { type: string, text?: string }) => (part.type === 'text' ? part.text : '') || '').join('')) || ''
                         return (
-                            <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} isTyping={true} />
+                            <MessageBubble key={message.id} isUser={message.role === 'user'} content={extractedText} parts={message.parts} currentDate={currentDate} avatarAI={avatarAI} isTyping={true} onReveal={scrollBottom} />
                         )
                     })}
                     <div ref={messagesEndRef} className='h-px w-full' />
