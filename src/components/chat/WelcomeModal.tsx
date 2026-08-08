@@ -173,8 +173,8 @@ export function WelcomeModal() {
                         className={buttonStyles.primaryForm}
                     >
                         {isLoading
-                            ? activeTexts.button_load
-                            : activeTexts.button_default
+                            ? activeTexts.welcome.buttonLoad
+                            : activeTexts.welcome.buttonDefault
                         }
                     </Button>
                 </FlexContainer>
